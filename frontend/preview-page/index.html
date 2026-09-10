@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preview Item | Foodie.</title>
+    <meta
+      name="description"
+      content="Preview the selected food or drink before adding it to your cart."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../auth-toast.css" />
+    <script>
+      const savedTheme = localStorage.getItem('foodieTheme');
+      const defaultTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = defaultTheme;
+    </script>
+  </head>
+  <body>
+    <div class="preview-shell">
+      <header class="topbar preview-topbar">
+        <div class="brand-wrap">
+          <div class="brand-badge">🍽️</div>
+          <div>
+            <h1>Foodie.</h1>
+            <p>Preview menu item</p>
+          </div>
+        </div>
+
+        <nav class="nav-links">
+          <a href="../index.html">Home</a>
+          <a href="../resturant-page/index.html">Restaurants</a>
+          <a href="../index.html#offers">Offers</a>
+          <a href="../auth.html">Account</a>
+        </nav>
+
+        <div class="topbar-right">
+          <div class="location-pill">Lagos, Nigeria</div>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme">🌙</button>
+          <button class="cart-pill" aria-label="Open cart" data-cart-target="../cart-page/cart.html">🛒 <span class="cart-count">0</span></button>
+          <a class="avatar-badge" id="profileLink" href="../auth.html" aria-label="Sign in or sign up" data-auth="../auth.html" data-account="../account.html" data-home="../index.html">👤</a>
+          <span class="profile-name" id="profileName"></span>
+        </div>
+      </header>
+
+      <main class="preview-layout">
+        <section class="preview-card">
+          <div class="preview-header-row">
+            <a href="../resturant-page/index.html" class="back-link">← Back to menu</a>
+            <span class="preview-badge">Preview item before checkout</span>
+          </div>
+
+          <div class="preview-image" id="previewImage">
+            <img src="" alt="Selected food item" />
+          </div>
+
+          <div class="preview-content">
+            <span class="item-tag" id="previewCategory">Food</span>
+            <h1 id="previewName">Selected item</h1>
+            <p class="preview-description" id="previewDescription">
+              Choose any food or drink from the restaurant menu and preview it before adding it to your cart.
+            </p>
+
+            <div class="preview-stats-row">
+              <div class="stat-pill">
+                <span>⭐</span>
+                <strong>4.8</strong>
+              </div>
+              <div class="stat-pill">
+                <span>⏱️</span>
+                <strong>30–40 min</strong>
+              </div>
+              <div class="stat-pill">
+                <span>📍</span>
+                <strong>Fresh</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="summary-card">
+          <span class="eyebrow">Order Summary</span>
+          <h2 id="summaryName">Item details</h2>
+          <p id="summaryCategory">Category: Food</p>
+
+          <div class="summary-row price-row">
+            <span>Price</span>
+            <strong id="previewPrice">₦0</strong>
+          </div>
+
+          <div class="quantity-block">
+            <span>Quantity</span>
+            <div class="quantity-control">
+              <button id="decreaseQty" type="button">−</button>
+              <span id="previewQuantity">1</span>
+              <button id="increaseQty" type="button">+</button>
+            </div>
+          </div>
+
+          <div class="total-block">
+            <span>Total</span>
+            <strong id="previewTotal">₦0</strong>
+          </div>
+
+          <button class="btn btn-primary btn-full" id="confirmBtn" type="button">Add to Cart</button>
+          <button class="btn btn-secondary btn-full favorite-btn" type="button">Save for Later</button>
+          <p class="confirm-note" id="confirmationMessage">Choose your quantity and add this meal to your cart when you are ready.</p>
+        </aside>
+      </main>
+      <footer class="site-footer">
+        <div class="footer-copy">
+          <h4>Foodie.</h4>
+          <p>Preview your items with confidence before adding them to your cart and enjoy speedy delivery around Lagos.</p>
+        </div>
+        <div class="footer-links">
+          <a href="../index.html">Home</a>
+          <a href="../resturant-page/index.html">Restaurants</a>
+          <a href="../index.html#offers">Offers</a>
+        </div>
+        <div class="footer-contact">
+          <strong>Call us</strong>
+          <a href="tel:+2348140000000">+234 814 000 0000</a>
+          <div class="footer-hours">
+            <span>Open daily</span>
+            <span>10:00am – 11:00pm</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="../utils.js"></script>
+    <script src="../auth-state.js"></script>
+    <script src="../cart-state.js"></script>
+    <script src="../theme.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

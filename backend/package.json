@@ -1,0 +1,39 @@
+{
+  "name": "foodie-backend",
+  "version": "1.0.0",
+  "description": "Backend for Foodie Nigerian food delivery app",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "seed": "node src/utils/seed.js",
+    "lint": "cd .. && npx eslint backend/",
+    "lint:fix": "cd .. && npx eslint backend/ --fix"
+  },
+  "keywords": [
+    "foodie",
+    "food delivery",
+    "backend",
+    "express",
+    "mongodb"
+  ],
+  "author": "Foodie",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "node-fetch": "^2.6.12",
+    "nodemailer": "^6.10.1",
+    "sequelize": "^6.32.1",
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

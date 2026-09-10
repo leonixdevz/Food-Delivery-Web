@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account | Foodie.</title>
+    <meta name="description" content="Your Foodie account details and order shortcuts." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="auth.css" />
+  </head>
+  <body>
+    <main class="auth-shell">
+      <section class="auth-card account-card">
+        <div class="auth-aside">
+          <div class="auth-brand">
+            <div class="brand-badge">🍽️</div>
+            <div>
+              <h1>Foodie Account</h1>
+
+              <p>Welcome back. Manage your profile, orders and session here.</p>
+            </div>
+          </div>
+
+          <div class="auth-hero">
+            <h2>Hi, <span id="accountName">Welcome back</span></h2>
+            <p>Use the links below to continue ordering or log out of Foodie.</p>
+          </div>
+        </div>
+
+        <div class="auth-form-panel">
+          <div class="account-summary">
+            <div class="summary-item">
+              <span class="eyebrow">Email</span>
+              <strong id="accountEmail">your@email.com</strong>
+            </div>
+            <div class="summary-item">
+              <span class="eyebrow">Member since</span>
+              <strong id="accountSince">-</strong>
+            </div>
+          </div>
+
+          <div class="account-actions">
+            <a class="btn btn-primary btn-full" href="index.html">Go to Home</a>
+            <button class="btn btn-secondary btn-full" id="logoutBtn" type="button">Logout</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-copy">
+        <h4>Foodie.</h4>
+        <p>Manage your Foodie account, revisit favorite meals, and continue ordering from Lagos’s favorite kitchens.</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="resturant-page/index.html">Restaurants</a>
+        <a href="auth.html">Account</a>
+      </div>
+      <div class="footer-contact">
+        <strong>Call us</strong>
+        <a href="tel:+2348140000000">+234 814 000 0000</a>
+        <div class="footer-hours">
+          <span>Open daily</span>
+          <span>10:00am – 11:00pm</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const accountData = JSON.parse(window.localStorage.getItem('foodieUser') || 'null');
+      const accountName = document.getElementById('accountName');
+      const accountEmail = document.getElementById('accountEmail');
+      const accountSince = document.getElementById('accountSince');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      if (!accountData || !accountData.email) {
+        window.location.href = 'auth.html';
+      } else {
+        accountName.textContent = accountData.name || 'Foodie User';
+        accountEmail.textContent = accountData.email || 'No email provided';
+        accountSince.textContent = new Date(accountData.timestamp).toLocaleDateString() || '-';
+      }
+
+      logoutBtn.addEventListener('click', () => {
+        window.localStorage.removeItem('foodieUser');
+        window.location.href = 'index.html';
+      });
+    </script>
+  </body>
+</html>

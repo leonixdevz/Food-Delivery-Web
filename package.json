@@ -1,0 +1,19 @@
+{
+  "name": "food-delivery-web-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "AUTO_OPEN_BROWSER=false npm --prefix backend start",
+    "dev": "AUTO_OPEN_BROWSER=false npm --prefix backend run dev",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.9.1",
+    "globals": "^17.11.0",
+    "prettier": "^3.9.6"
+  }
+}

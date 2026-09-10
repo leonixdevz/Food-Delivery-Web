@@ -1,0 +1,12 @@
+node_modules/
+package-lock.json
+*.sqlite
+backend/data/
+a.out
+hello
+hello.cpp
+*.png
+*.jpeg
+*.jpg
+*.gif
+*.svg

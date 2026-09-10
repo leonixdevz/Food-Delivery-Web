@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Foodie. Nigeria</title>
+    <meta
+      name="description"
+      content="Foodie. is a Nigerian food delivery storefront with local dishes and naira prices."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="auth-toast.css" />
+    <script>
+      const savedTheme = localStorage.getItem('foodieTheme');
+      const defaultTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = defaultTheme;
+    </script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="brand-wrap">
+          <div class="brand-badge">🍽️</div>
+          <div>
+            <h1>Foodie.</h1>
+            <p>Nigerian Food Delivery</p>
+          </div>
+        </div>
+
+        <nav class="nav-links">
+          <a href="#home" class="active-link">Home</a>
+          <a href="#restaurants">Restaurants</a>
+          <a href="#offers">Offers</a>
+          <a href="resturant-page/index.html">Menu</a>
+          <a href="auth.html">Account</a>
+        </nav>
+
+        <div class="topbar-right">
+          <div class="location-pill">Lagos, Nigeria</div>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme">🌙</button>
+          <button class="cart-pill" id="cartToggle" data-cart-target="cart-page/cart.html" aria-label="Open cart">
+            <span>Cart</span>
+            <span class="cart-count" id="cartCount">0</span>
+          </button>
+          <a class="avatar-badge" id="profileLink" href="auth.html" aria-label="Sign in or sign up" data-auth="auth.html" data-account="account.html" data-home="index.html">👩🏽</a>
+          <span class="profile-name" id="profileName"></span>
+        </div>
+      </header>
+
+      <section class="hero" id="home">
+        <div class="hero-copy">
+          <div class="hero-badge">🔥 Free delivery for orders over ₦8,000</div>
+          <h2>Delicious food,<br />delivered to you</h2>
+          <p>Discover the best restaurants near you and get your favorite meals delivered fast and fresh.</p>
+
+          <div class="search-bar">
+            <span class="search-icon">⌕</span>
+            <input id="searchInput" type="text" placeholder="Search restaurants or dishes" />
+            <button id="searchButton" type="button">Search</button>
+          </div>
+
+          <div class="feature-badges">
+            <div class="feature-pill">🚚 Fast delivery</div>
+            <div class="feature-pill">⏱️ Freshly prepared</div>
+            <div class="feature-pill">⭐ Trusted kitchens</div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="discount-badge">UP TO<br /><strong>50%</strong><br />OFF</div>
+          <div class="dish-plate">
+            <img
+              src="images/Jollof%20Rice%20With%20Chicken.jpeg"
+              alt="Nigerian jollof rice with grilled chicken"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="categories-section" id="services">
+        <div class="section-title-row">
+          <h3>Categories</h3>
+          <a href="resturant-page/index.html">View all</a>
+        </div>
+
+        <div class="categories-grid">
+          <a class="category-tile-link" href="resturant-page/index.html?restaurant=pizza-hub&category=pizza">
+            <div class="category-tile"><span>🍕</span><strong>Pizza</strong></div>
+          </a>
+          <a class="category-tile-link" href="resturant-page/index.html?restaurant=burger-king&category=burgers">
+            <div class="category-tile"><span>🍔</span><strong>Burgers</strong></div>
+          </a>
+          <a class="category-tile-link" href="resturant-page/index.html?restaurant=mama-put-restaurant&category=rice">
+            <div class="category-tile"><span>🍚</span><strong>Rice</strong></div>
+          </a>
+          <a class="category-tile-link" href="resturant-page/index.html?restaurant=burger-king&category=noodles">
+            <div class="category-tile"><span>🥢</span><strong>Noodles</strong></div>
+          </a>
+          <a class="category-tile-link" href="resturant-page/index.html?restaurant=chicken-republic&category=chicken">
+            <div class="category-tile"><span>🍗</span><strong>Chicken</strong></div>
+          </a>
+          <a class="category-tile-link" href="resturant-page/index.html?restaurant=pizza-hub&category=desserts">
+            <div class="category-tile"><span>🧁</span><strong>Desserts</strong></div>
+          </a>
+          <a class="category-tile-link" href="resturant-page/index.html?restaurant=mama-put-restaurant&category=drinks">
+            <div class="category-tile"><span>🥤</span><strong>Drinks</strong></div>
+          </a>
+          <a class="category-tile-link" href="resturant-page/index.html?restaurant=mama-put-restaurant&category=salads">
+            <div class="category-tile"><span>🥗</span><strong>Salads</strong></div>
+          </a>
+          <a class="category-tile-link" href="resturant-page/index.html?restaurant=chicken-republic&category=snacks">
+            <div class="category-tile"><span>🍟</span><strong>Snacks</strong></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="restaurants" id="restaurants">
+        <div class="section-title-row">
+          <h3>Popular Restaurants</h3>
+          <a href="resturant-page/index.html">View all</a>
+        </div>
+
+        <div class="restaurant-grid">
+          <a class="restaurant-card-link" href="resturant-page/index.html?restaurant=mama-put-restaurant">
+            <article class="restaurant-card">
+              <div class="restaurant-image">
+                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=900&q=80" alt="Mama Put restaurant" />
+              </div>
+              <div class="restaurant-info">
+                <h4>Mama Put Restaurant</h4>
+                <p>₦1,200 · 1.2 km · Lagos</p>
+              </div>
+            </article>
+          </a>
+
+          <a class="restaurant-card-link" href="resturant-page/index.html?restaurant=chicken-republic">
+            <article class="restaurant-card">
+              <div class="restaurant-image">
+                <img src="https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=900&q=80" alt="Chicken Republic" />
+              </div>
+              <div class="restaurant-info">
+                <h4>Chicken Republic</h4>
+                <p>₦1,800 · 1.8 km · Festac</p>
+              </div>
+            </article>
+          </a>
+
+          <a class="restaurant-card-link" href="resturant-page/index.html?restaurant=pizza-hub">
+            <article class="restaurant-card">
+              <div class="restaurant-image">
+                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80" alt="Pizza Hub" />
+              </div>
+              <div class="restaurant-info">
+                <h4>Pizza Hub</h4>
+                <p>₦2,000 · 2.1 km · Ikeja</p>
+              </div>
+            </article>
+          </a>
+
+          <a class="restaurant-card-link" href="resturant-page/index.html?restaurant=burger-king">
+            <article class="restaurant-card">
+              <div class="restaurant-image">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80" alt="Burger King" />
+              </div>
+              <div class="restaurant-info">
+                <h4>Burger King</h4>
+                <p>₦1,500 · 1.6 km · Yaba</p>
+              </div>
+            </article>
+          </a>
+
+          <a class="restaurant-card-link" href="resturant-page/index.html?restaurant=buka-hut">
+            <article class="restaurant-card">
+              <div class="restaurant-image">
+                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80" alt="Buka Hut" />
+              </div>
+              <div class="restaurant-info">
+                <h4>Buka Hut</h4>
+                <p>₦1,900 · 2.5 km · Surulere</p>
+              </div>
+            </article>
+          </a>
+        </div>
+        <p class="no-results-message" style="display:none; text-align:center; color:#7a4d23; margin-top:16px;">No restaurants match your search. Try a different term.</p>
+      </section>
+
+      <section class="offers" id="offers">
+        <div class="section-title-row">
+          <h3>Featured Offers</h3>
+          <a href="resturant-page/index.html">View all offers</a>
+        </div>
+        <p class="offer-intro">Enjoy limited-time deals on crowd favorites, from jollof and pizza to burgers and fresh salads.</p>
+
+        <div class="offer-grid">
+          <article class="offer-card offer-card-1">
+            <div>
+              <span>Weekend Special</span>
+              <h4>Buy 1 Get 1 Free</h4>
+              <p>On all pizzas</p>
+              <a class="btn btn-primary" href="resturant-page/index.html?restaurant=pizza-hub&category=pizza">Order Now</a>
+            </div>
+          </article>
+
+          <article class="offer-card offer-card-2">
+            <div>
+              <span>Budget Tuesday</span>
+              <h4>Up to 40% Off</h4>
+              <p>On selected burgers</p>
+              <a class="btn btn-primary" href="resturant-page/index.html?restaurant=burger-king&category=burgers">Order Now</a>
+            </div>
+          </article>
+
+          <article class="offer-card offer-card-3">
+            <div>
+              <span>Healthy & Tasty</span>
+              <h4>Up to 30% Off</h4>
+              <p>On healthy meals</p>
+              <a class="btn btn-primary" href="resturant-page/index.html?restaurant=mama-put-restaurant&category=salads">Order Now</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <div class="footer-copy">
+          <h4>Foodie.</h4>
+          <p>Fresh Nigerian food delivered fast. Browse trusted restaurants, preview every dish, and enjoy doorstep delivery across Lagos.</p>
+        </div>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="resturant-page/index.html">Restaurants</a>
+          <a href="#offers">Offers</a>
+        </div>
+        <div class="footer-contact">
+          <strong>Call us</strong>
+          <a href="tel:+2348140000000">+234 814 000 0000</a>
+          <div class="footer-hours">
+            <span>Open daily</span>
+            <span>10:00am – 11:00pm</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="auth-state.js"></script>
+    <script src="cart-state.js"></script>
+    <script src="theme.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

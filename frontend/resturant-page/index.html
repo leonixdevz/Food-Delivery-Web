@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Page | Foodie.</title>
+    <meta
+      name="description"
+      content="A professional restaurant detail page for Nigerian food delivery."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../auth-toast.css" />
+    <script>
+      const savedTheme = localStorage.getItem('foodieTheme');
+      const defaultTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = defaultTheme;
+    </script>
+  </head>
+  <body>
+    <div class="restaurant-page-shell">
+      <header class="topbar">
+        <div class="brand-wrap">
+          <div class="brand-badge">🍽️</div>
+          <div>
+            <h1>Foodie.</h1>
+            <p>Nigerian food delivery</p>
+          </div>
+        </div>
+
+        <nav class="nav-links">
+          <a href="../index.html">Home</a>
+          <a href="../resturant-page/index.html" class="active-link">Restaurants</a>
+          <a href="../index.html#offers">Offers</a>
+          <a href="../auth.html">Account</a>
+        </nav>
+
+        <div class="topbar-right">
+          <div class="location-pill">Lagos, Nigeria</div>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme">🌙</button>
+          <button class="cart-pill" aria-label="Open cart" data-cart-target="../cart-page/cart.html">
+            <span>Cart</span>
+            <span class="cart-count">0</span>
+          </button>
+          <a class="avatar-badge" id="profileLink" href="../auth.html" aria-label="Sign in or sign up" data-auth="../auth.html" data-account="../account.html" data-home="../index.html">👤</a>
+          <span class="profile-name" id="profileName"></span>
+        </div>
+      </header>
+
+      <main class="restaurant-layout">
+        <section class="restaurant-hero" id="restaurantHero">
+          <div class="hero-overlay"></div>
+          <div class="hero-content">
+            <span class="hero-eyebrow" id="restaurantCuisine">Restaurant</span>
+            <h2 id="restaurantName">Chicken Republic</h2>
+            <p id="restaurantDescription">
+              Authentic and crowd-favorite meals delivered fast with premium quality.
+            </p>
+
+            <div class="hero-stats">
+              <div class="stat-pill">
+                <span>⭐</span>
+                <strong id="restaurantRating">4.4</strong>
+              </div>
+              <div class="stat-pill">
+                <span>⏱️</span>
+                <strong id="restaurantTime">30–40 min</strong>
+              </div>
+              <div class="stat-pill">
+                <span>📍</span>
+                <strong id="restaurantDistance">1.8 km</strong>
+              </div>
+              <div class="stat-pill">
+                <span>🚚</span>
+                <strong id="restaurantFee">₦800</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Mobile filter bar (shown on small screens) -->
+        <div id="mobileFilters" class="mobile-filters" style="display:none;padding:12px;border-bottom:1px solid #eee;background:var(--surface);">
+          <label for="mobileCategorySelect" style="margin-right:8px;">Category</label>
+          <select id="mobileCategorySelect" style="margin-right:12px;padding:6px;">
+            <option value="">All</option>
+          </select>
+          <label for="mobilePriceSelect" style="margin-right:8px;">Price</label>
+          <select id="mobilePriceSelect" style="padding:6px;">
+            <option value="all">All</option>
+            <option value="under-1000">Under ₦1,000</option>
+            <option value="1000-3000">₦1,000–₦3,000</option>
+            <option value="above-3000">Above ₦3,000</option>
+          </select>
+        </div>
+
+        <div class="content-grid">
+          <aside class="restaurant-sidebar">
+            <div class="sidebar-panel">
+              <div class="sidebar-brand">
+                <div class="logo-badge">🍽️</div>
+                <div>
+                  <h2>Foodie.</h2>
+                  <p>Discover local flavors</p>
+                </div>
+              </div>
+              <div class="sidebar-divider"></div>
+
+              <div class="sidebar-nav">
+                <span class="sidebar-label">NAVIGATION</span>
+                <a href="../index.html">Home</a>
+                <a href="../resturant-page/index.html" class="active">Restaurants</a>
+                <a href="../index.html#offers">Offers</a>
+                <a href="../auth.html">Account</a>
+              </div>
+
+              <div class="sidebar-divider"></div>
+
+              <div class="sidebar-categories">
+                <span class="sidebar-label">CATEGORIES</span>
+                <a class="category-link" data-category="" href="#">All Menu</a>
+                <a class="category-link" data-category="burgers" href="#">Burgers</a>
+                <a class="category-link" data-category="rice" href="#">Rice</a>
+                <a class="category-link" data-category="noodles" href="#">Noodles</a>
+                <a class="category-link" data-category="chicken" href="#">Chicken</a>
+                <a class="category-link" data-category="drinks" href="#">Drinks</a>
+                <a class="category-link" data-category="salads" href="#">Salads</a>
+              </div>
+
+              <div class="sidebar-info">
+                <span class="sidebar-label">CONTACT & HOURS</span>
+                <p id="restaurantContact">Call us for the latest menu updates.</p>
+                <p id="restaurantHours">Open daily from 10:00am to 11:00pm.</p>
+                <p id="restaurantArea">Serving Lagos Mainland and Island.</p>
+              </div>
+            </div>
+          </aside>
+
+          <section class="menu-section">
+            <div class="section-heading-row">
+              <div>
+                <span class="section-label">Popular dishes</span>
+                <h3>Pick your favorite meal</h3>
+              </div>
+              <div class="section-note">Nigeria delivery • Fresh • Fast</div>
+            </div>
+
+            <div class="menu-grid" id="restaurantMenu"></div>
+          </section>
+        </div>
+      </main>
+      <footer class="site-footer">
+        <div class="footer-copy">
+          <h4>Foodie.</h4>
+          <p>Fresh Nigerian food delivered fast. Browse trusted restaurants, preview every dish, and enjoy doorstep delivery across Lagos.</p>
+        </div>
+        <div class="footer-links">
+          <a href="../index.html">Home</a>
+          <a href="../resturant-page/index.html">Restaurants</a>
+          <a href="../index.html#offers">Offers</a>
+        </div>
+        <div class="footer-contact">
+          <strong>Call us</strong>
+          <a href="tel:+2348140000000">+234 814 000 0000</a>
+          <div class="footer-hours">
+            <span>Open daily</span>
+            <span>10:00am – 11:00pm</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="../utils.js"></script>
+    <script src="../auth-state.js"></script>
+    <script src="../cart-state.js"></script>
+    <script src="../theme.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

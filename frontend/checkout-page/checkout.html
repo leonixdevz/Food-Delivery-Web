@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout | Foodie.</title>
+    <meta name="description" content="Review your cart and place your order on Foodie." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      const savedTheme = localStorage.getItem('foodieTheme');
+      const defaultTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = defaultTheme;
+    </script>
+  </head>
+  <body>
+    <div class="checkout-shell">
+      <header class="topbar checkout-topbar">
+        <div class="brand-wrap">
+          <div class="brand-badge">🍽️</div>
+          <div>
+            <h1>Foodie.</h1>
+            <p>Checkout</p>
+          </div>
+        </div>
+
+        <nav class="nav-links">
+          <a href="../index.html">Home</a>
+          <a href="../resturant-page/index.html">Restaurants</a>
+          <a href="../index.html#offers">Offers</a>
+          <a href="../auth.html">Account</a>
+        </nav>
+
+        <div class="checkout-topbar-actions">
+          <div class="location-pill">Lagos, Nigeria</div>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme">🌙</button>
+          <button class="cart-pill" aria-label="Open cart" data-cart-target="../cart-page/cart.html">
+            <span>Cart</span>
+            <span class="cart-count">0</span>
+          </button>
+          <a class="avatar-badge" id="profileLink" href="../auth.html" aria-label="Sign in or sign up" data-auth="../auth.html" data-account="../account.html" data-home="../index.html">👤</a>
+        </div>
+      </header>
+
+      <main class="checkout-content">
+        <section class="checkout-panel">
+          <div class="section-header">
+            <span class="eyebrow">Order summary</span>
+            <h2>Order summary</h2>
+          </div>
+
+          <div class="summary-card order-summary-card">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <strong id="subtotalAmount">₦0.00</strong>
+            </div>
+            <div class="summary-row">
+              <span>Delivery fee</span>
+              <strong id="deliveryAmount">₦500</strong>
+            </div>
+            <div class="summary-row">
+              <span>Discount</span>
+              <strong id="discountAmount">₦0</strong>
+            </div>
+            <div class="summary-row total-row">
+              <span>Total</span>
+              <strong id="summaryTotal">₦0.00</strong>
+            </div>
+          </div>
+
+          <div class="summary-card address-card">
+            <div class="card-header">
+              <span>Delivery address</span>
+              <button class="ghost-btn" id="changeAddressBtn" type="button">Change</button>
+            </div>
+            <p class="address-line" id="selectedAddress">12, Freedom Way, Lekki Phase 1, Lagos, Nigeria</p>
+            <label class="address-edit" id="addressEdit" hidden>
+              Delivery address
+              <input id="deliveryAddressInput" type="text" value="12, Freedom Way, Lekki Phase 1, Lagos, Nigeria" autocomplete="street-address" />
+            </label>
+              <p class="address-line">Doorstep delivery available from 10:00am to 11:00pm daily.</p>
+            <div class="payment-card">
+              <label>
+                <input type="radio" name="payment" value="demo" checked />
+                <span>Payment</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="summary-card payment-info-card">
+            <div id="paymentInfoSimulated" class="payment-info">
+              <div class="card-header">
+                <span>Payment</span>
+              </div>
+              <p>Pay with a card. No real payment provider is contacted, and no money is charged.</p>
+            </div>
+          </div>
+
+          <div class="demo-payment-panel" id="demoPaymentPanel">
+            <div class="card-header">
+              <span>Payment details</span>
+              <strong>SIMULATED</strong>
+            </div>
+            <label class="demo-field">
+              Name on card
+              <input id="demoPaymentName" type="text" autocomplete="off" placeholder="Demo Customer" />
+            </label>
+            <label class="demo-field">
+              Card number
+              <input id="demoCardNumber" type="text" inputmode="numeric" autocomplete="off" placeholder="4242 4242 4242 4242" maxlength="19" />
+            </label>
+            <div class="demo-field-row">
+              <label class="demo-field">
+                Expiry
+                <input id="demoCardExpiry" type="text" inputmode="numeric" autocomplete="off" placeholder="12/28" maxlength="5" />
+              </label>
+              <label class="demo-field">
+                CVV
+                <input id="demoCardCvv" type="text" inputmode="numeric" autocomplete="off" placeholder="123" maxlength="4" />
+              </label>
+            </div>
+            <label class="demo-field">
+              Simulate result
+              <select id="demoPaymentOutcome">
+                <option value="success">Successful payment</option>
+                <option value="pending">Pending payment</option>
+                <option value="declined">Declined payment</option>
+              </select>
+            </label>
+            <p class="demo-payment-note">Use any demo card details. This checkout never contacts Paystack, a bank, or a card network.</p>
+          </div>
+
+          <button class="btn btn-primary btn-full" id="placeOrderBtn" type="button">Place order</button>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-copy">
+          <h4>Foodie.</h4>
+          <p>Fresh Nigerian food delivered fast. Review your details, place your order, and enjoy delivery from trusted Lagos restaurants.</p>
+        </div>
+        <div class="footer-links">
+          <a href="../index.html">Home</a>
+          <a href="../resturant-page/index.html">Restaurants</a>
+          <a href="../auth.html">Account</a>
+        </div>
+        <div class="footer-contact">
+          <strong>Call us</strong>
+          <a href="tel:+2348140000000">+234 814 000 0000</a>
+          <div class="footer-hours">
+            <span>Open daily</span>
+            <span>10:00am – 11:00pm</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="../utils.js"></script>
+    <script src="../theme.js"></script>
+    <script src="checkout.js"></script>
+  </body>
+</html>
