@@ -288,7 +288,9 @@ async function initRestaurantPage() {
     categoryTitle.textContent = selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1);
   }
 
-  const fallbackImage = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600"%3E%3Crect width="900" height="600" fill="%23f8f4ef"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%236e5a4e" font-family="Inter,sans-serif" font-size="48"%3EFood+photo%3C/text%3E%3C/svg%3E';
+  // Quotes inside the data URI must be percent-encoded: this string is embedded
+  // in a double-quoted onerror="..." attribute, and raw quotes break the JS.
+  const fallbackImage = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 900 600%22%3E%3Crect width=%22900%22 height=%22600%22 fill=%22%23f8f4ef%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%236e5a4e%22 font-family=%22Inter,sans-serif%22 font-size=%2248%22%3EFood+photo%3C/text%3E%3C/svg%3E';
   // Render function for menu items (used by filters)
   function renderMenu(items) {
     if (!menuGrid) return;

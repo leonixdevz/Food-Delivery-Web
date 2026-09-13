@@ -20,7 +20,6 @@ const grandTotalDisplay = document.getElementById('grandTotal');
 const checkoutButton = document.getElementById('proceedCheckout');
 const promoCodeInput = document.getElementById('promoCode');
 const applyPromoButton = document.getElementById('applyPromo');
-let isPromoApplied = false;
 
 /* ──────────────────────────────────────────────
  * Rendering
@@ -139,7 +138,6 @@ function handlePromoCodeApply() {
   const enteredCode = (promoCodeInput?.value || '').trim().toUpperCase();
 
   if (enteredCode === 'FOODIE10') {
-    isPromoApplied = true;
     if (promoCodeInput) promoCodeInput.disabled = true;
     if (applyPromoButton) applyPromoButton.disabled = true;
     renderCartPageContents();
