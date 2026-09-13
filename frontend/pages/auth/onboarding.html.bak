@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Complete Your Profile | Foodie.</title>
+    <meta name="description" content="Complete your Foodie profile to start ordering." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="auth.css" />
+  </head>
+  <body>
+    <main class="auth-shell">
+      <section class="auth-card">
+        <div class="auth-aside">
+          <div class="auth-brand">
+            <div class="brand-badge">🍽️</div>
+            <div>
+              <h1>Foodie.</h1>
+              <p>Complete your profile to start ordering delicious meals.</p>
+            </div>
+          </div>
+          <img src="images/bike.png" alt="">
+          <div class="auth-hero">
+            <h2>Welcome aboard!</h2>
+            <p>Choose a username to personalize your Foodie experience.</p>
+          </div>
+        </div>
+
+        <div class="auth-form-panel">
+          <h3 style="margin: 0 0 8px; font-size: 1.5rem;">Complete your profile</h3>
+          <p style="margin: 0 0 24px; color: var(--muted);">Pick a username that represents you.</p>
+
+          <form class="auth-form" id="onboardingForm">
+            <div class="form-group">
+              <label for="usernameInput">Username</label>
+              <input id="usernameInput" type="text" placeholder="e.g., foodlover123" required />
+              <p style="margin: 8px 0 0; font-size: 0.9rem; color: var(--muted);">
+                This is how you'll appear on Foodie.
+              </p>
+            </div>
+
+            <button class="btn btn-primary btn-full" id="submitOnboarding" type="submit">
+              Complete profile
+            </button>
+            <p class="auth-feedback" id="onboardingFeedback" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <h4>Foodie.</h4>
+        <p>Fresh Nigerian food delivered fast. Browse restaurants, preview dishes, and order with confidence.</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="resturant-page/index.html">Restaurants</a>
+        <a href="auth.html">Account</a>
+      </div>
+    </footer>
+
+    <script src="onboarding.js"></script>
+  </body>
+</html>

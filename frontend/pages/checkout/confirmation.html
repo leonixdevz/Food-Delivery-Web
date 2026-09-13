@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Confirmed | Foodie.</title>
+    <meta name="description" content="Your order has been confirmed on Foodie." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/styles/main.css" />
+    <link rel="stylesheet" href="/assets/styles/auth-toast.css" />
+    <script src="/assets/scripts/page-guard.js" data-page="confirmation" data-expected-scripts='[]'></script>
+    <script>
+      const savedTheme = localStorage.getItem('foodieTheme');
+      const defaultTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = defaultTheme;
+    </script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar checkout-topbar">
+        <div class="brand-wrap">
+          <div class="brand-badge">🍽️</div>
+          <div>
+            <h1>Foodie.</h1>
+            <p>Order confirmed</p>
+          </div>
+        </div>
+
+        <nav class="nav-links">
+          <a href="/pages/home/index.html">Home</a>
+          <a href="/pages/restaurants/index.html">Restaurants</a>
+          <a href="/pages/home/index.html#offers">Offers</a>
+          <a href="/pages/auth/login.html">Account</a>
+        </nav>
+
+        <div class="checkout-topbar-actions">
+          <div class="location-pill">Lagos, Nigeria</div>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme">🌙</button>
+          <button class="cart-pill" aria-label="Open cart" data-cart-target="/pages/cart/index.html">
+            <span>Cart</span>
+            <span class="cart-count">0</span>
+          </button>
+          <a class="avatar-badge" id="profileLink" href="/pages/auth/login.html" aria-label="Sign in or sign up" data-auth="/pages/auth/login.html" data-account="/pages/auth/account.html" data-home="/pages/home/index.html">👤</a>
+        </div>
+      </header>
+
+      <main class="confirmation-shell">
+        <section class="confirmation-card">
+          <div class="confirmation-badge" id="confirmationBadge">✅</div>
+          <h1 id="confirmationHeading">Order confirmed!</h1>
+          <p id="confirmationMessage">Your order is confirmed and we’re preparing it now. Expect delivery soon.</p>
+
+          <div class="confirmation-summary-card">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <strong id="subtotalDisplay">₦0.00</strong>
+            </div>
+            <div class="summary-row">
+              <span>Delivery fee</span>
+              <strong id="deliveryDisplay">₦0.00</strong>
+            </div>
+            <div class="summary-row">
+              <span>Discount</span>
+              <strong id="discountDisplay">₦0.00</strong>
+            </div>
+            <div class="summary-row total-row">
+              <span>Total paid</span>
+              <strong id="confirmationTotal">₦0.00</strong>
+            </div>
+          </div>
+
+          <div class="confirmation-detail-card">
+            <div class="card-header">
+              <span>Delivery address</span>
+            </div>
+            <p id="deliveryAddress">12, Freedom Way, Lekki Phase 1, Lagos, Nigeria</p>
+          </div>
+
+          <div class="confirmation-detail-card">
+            <div class="card-header">
+              <span>Payment method</span>
+            </div>
+            <p id="paymentMethod">Cash on Delivery</p>
+              <p id="transactionReference" hidden></p>
+          </div>
+
+          <div class="confirmation-actions">
+            <a class="btn btn-primary btn-full" href="/pages/home/index.html">Continue shopping</a>
+            <button class="btn btn-secondary btn-full" id="visitAccountBtn" type="button">Visit account</button>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-copy">
+          <h4>Foodie.</h4>
+          <p>Your order is confirmed and our team is preparing it now. We’re here to make every delivery feel effortless.</p>
+        </div>
+        <div class="footer-links">
+          <a href="/pages/home/index.html">Home</a>
+          <a href="/pages/restaurants/index.html">Restaurants</a>
+          <a href="/pages/auth/login.html">Account</a>
+        </div>
+        <div class="footer-contact">
+          <strong>Call us</strong>
+          <a href="tel:+2348140000000">+234 814 000 0000</a>
+          <div class="footer-hours">
+            <span>Open daily</span>
+            <span>10:00am – 11:00pm</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="/assets/scripts/auth-state.js"></script>
+    <script src="/assets/scripts/theme.js"></script>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const subtotal = Number(params.get('subtotal')) || 0;
+      const delivery = Number(params.get('delivery')) || 0;
+      const discount = Number(params.get('discount')) || 0;
+      const total = Number(params.get('total')) || 0;
+      const payment = params.get('payment') || 'success';
+      const address = params.get('address') || '12, Freedom Way, Lekki Phase 1, Lagos, Nigeria';
+
+      if (payment === 'declined') {
+        document.getElementById('confirmationBadge').textContent = '⚠️';
+        document.getElementById('confirmationHeading').textContent = 'Payment declined';
+        document.getElementById('confirmationMessage').textContent = 'This demo payment was declined. No real money was charged.';
+      } else if (payment === 'pending') {
+        document.getElementById('confirmationBadge').textContent = '⏳';
+        document.getElementById('confirmationHeading').textContent = 'Payment pending';
+        document.getElementById('confirmationMessage').textContent = 'Your payment is being processed. We will update your order once it is confirmed.';
+      } else {
+        document.getElementById('confirmationBadge').textContent = '✅';
+        document.getElementById('confirmationHeading').textContent = 'Payment successful';
+        document.getElementById('confirmationMessage').textContent = 'Your order has been confirmed and is being prepared for delivery.';
+      }
+
+      document.getElementById('subtotalDisplay').textContent = `₦${subtotal.toLocaleString('en-NG')}`;
+      document.getElementById('deliveryDisplay').textContent = `₦${delivery.toLocaleString('en-NG')}`;
+      document.getElementById('discountDisplay').textContent = `₦${discount.toLocaleString('en-NG')}`;
+      document.getElementById('confirmationTotal').textContent = `₦${total.toLocaleString('en-NG')}`;
+      document.getElementById('deliveryAddress').textContent = address;
+      document.getElementById('paymentMethod').textContent = payment === 'declined'
+        ? 'Demo payment declined'
+        : payment === 'pending'
+          ? 'Demo payment pending'
+          : payment === 'opay'
+            ? 'OPay transfer'
+            : 'Demo payment';
+      const reference = params.get('reference');
+      const transactionReference = document.getElementById('transactionReference');
+      if (reference && transactionReference) {
+        transactionReference.hidden = false;
+        transactionReference.textContent = `Reference: ${reference}`;
+      }
+
+      const visitAccountBtn = document.getElementById('visitAccountBtn');
+      if (visitAccountBtn) {
+        visitAccountBtn.addEventListener('click', (event) => {
+          const user = JSON.parse(window.localStorage.getItem('foodieUser') || 'null');
+          if (user && user.email) {
+            showLogoutToast({ homePath: '/pages/home/index.html' });
+          } else {
+            window.location.href = '/pages/auth/login.html';
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

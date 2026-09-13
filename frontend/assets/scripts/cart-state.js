@@ -96,7 +96,7 @@ function getOrCreateCartPanel() {
   panel.querySelector('.foodie-cart-continue').addEventListener('click', hideCartPanel);
   panel.querySelector('.foodie-cart-checkout').addEventListener('click', () => {
     hideCartPanel();
-    window.location.href = new URL('../checkout-page/checkout.html', window.location.href).toString();
+    window.location.href = '/pages/checkout/index.html';
   });
   panel.querySelector('[data-close-cart="true"]').addEventListener('click', hideCartPanel);
 

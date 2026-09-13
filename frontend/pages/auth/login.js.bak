@@ -3,10 +3,10 @@
  *
  * Handles sign-in and sign-up on a single form:
  *   - Toggling between sign-in and sign-up modes
- *   - Form validation (username, email, password)
+ *   - Form validation (email, password)
  *   - API calls to /api/auth/register and /api/auth/login
  *   - Storing credentials in localStorage
- *   - Redirecting after successful authentication
+ *   - Redirecting after successful authentication or to onboarding for new signups
  *
  * Depends on: nothing (self-contained)
  */
@@ -17,7 +17,6 @@
 
 const signInTabButton = document.getElementById('signInTab');
 const signUpTabButton = document.getElementById('signUpTab');
-const usernameFieldGroup = document.getElementById('nameGroup');
 const authForm = document.getElementById('authForm');
 const authHelperNote = document.getElementById('authNote');
 const authFeedbackMessage = document.getElementById('authFeedback');
@@ -46,8 +45,6 @@ function refreshAuthFormLayout() {
 
   signInTabButton.classList.toggle('active', !isSignUp);
   signUpTabButton.classList.toggle('active', isSignUp);
-  usernameFieldGroup.hidden = !isSignUp;
-  document.getElementById('emailGroup').hidden = !isSignUp;
 
   authHelperNote.textContent = isSignUp
     ? 'Already have an account? Sign in to continue.'
@@ -105,7 +102,7 @@ function isValidEmailAddress(email) {
  * Send a sign-in or sign-up request to the authentication API.
  *
  * @param {'register'|'login'} endpoint - The API endpoint.
- * @param {Object} payload - The request body (username, password, email).
+ * @param {Object} payload - The request body (email, password).
  * @returns {Promise<Object>} The parsed response (user + token).
  * @throws {Error} If the server returns an error.
  */
@@ -138,14 +135,16 @@ async function submitAuthCredentials(endpoint, payload) {
 authForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-  const username = document.getElementById('authUsername').value.trim();
+  const email = document.getElementById('authEmail').value.trim();
   const password = document.getElementById('authPassword').value;
-  const emailInputElement = document.getElementById('authEmail');
-  const email = emailInputElement ? emailInputElement.value.trim() : '';
 
   // Validate required fields
-  if (!username || !password || (currentAuthMode === 'signup' && !email)) {
+  if (!email || !password) {
     return displayAuthFeedback('error', 'Please complete all required fields.');
+  }
+
+  if (currentAuthMode === 'signin' && !isValidEmailAddress(email)) {
+    return displayAuthFeedback('error', 'Please enter a valid email address.');
   }
 
   if (password.length < 6) {
@@ -153,10 +152,7 @@ authForm.addEventListener('submit', async (event) => {
   }
 
   try {
-    const requestPayload = { username, password };
-    if (currentAuthMode === 'signup') {
-      requestPayload.email = email.toLowerCase();
-    }
+    const requestPayload = { email: email.toLowerCase(), password };
 
     const apiEndpoint = currentAuthMode === 'signup' ? 'register' : 'login';
     const authResponse = await submitAuthCredentials(apiEndpoint, requestPayload);
@@ -172,7 +168,7 @@ authForm.addEventListener('submit', async (event) => {
 
     // Redirect after a brief delay so the user sees the success message
     setTimeout(() => {
-      window.location.href = redirectDestination;
+      window.location.href = currentAuthMode === 'signup' ? 'onboarding.html' : redirectDestination;
     }, 700);
   } catch (error) {
     displayAuthFeedback('error', error.message);

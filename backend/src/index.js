@@ -25,6 +25,7 @@ connectDB();
 
 app.use(cors());
 app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
+app.use('/api/payments/opay/webhook', express.raw({ type: '*/*' }));
 app.use(express.json());
 app.use(morgan('tiny'));
 

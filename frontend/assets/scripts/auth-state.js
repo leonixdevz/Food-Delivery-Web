@@ -153,7 +153,7 @@ function showLogoutToast(options = {}) {
       const profileLink = document.getElementById('profileLink');
       const homePath = options.homePath
         || (profileLink?.dataset?.home)
-        || 'index.html';
+        || '/pages/home/index.html';
       window.location.href = homePath;
     },
     { once: true },
@@ -187,8 +187,9 @@ function syncProfileHeaderState() {
 
   if (!profileLink) return;
 
-  const accountPagePath = profileLink.dataset.account || 'account.html';
-  const authPagePath = profileLink.dataset.auth || 'auth.html';
+  // Fall back to the real auth pages when a page doesn't provide data attributes
+  const accountPagePath = profileLink.dataset.account || '/pages/auth/account.html';
+  const authPagePath = profileLink.dataset.auth || '/pages/auth/login.html';
 
   // Remove any previous click handler before re-attaching
   profileLink.removeEventListener('click', handleSignedInProfileClick);

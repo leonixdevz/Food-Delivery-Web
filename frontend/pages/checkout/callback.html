@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Processing payment...</title>
+    <link rel="stylesheet" href="/assets/styles/main.css" />
+    <script src="/assets/scripts/page-guard.js" data-page="callback" data-expected-scripts='[]'></script>
+  </head>
+  <body>
+    <main class="confirmation-shell">
+      <section class="confirmation-card">
+        <h1>Processing payment…</h1>
+        <p id="message">Please wait while we verify your demo payment.</p>
+      </section>
+    </main>
+
+    <script>
+      (async function () {
+        const params = new URLSearchParams(window.location.search);
+        const reference = params.get('reference') || params.get('trxref') || params.get('trxRef');
+        const msgEl = document.getElementById('message');
+
+        if (!reference) {
+          msgEl.textContent = 'No payment reference was provided. If your payment completed, contact support with your order details.';
+          return;
+        }
+
+        const token = window.localStorage.getItem('foodieToken');
+        if (!token) {
+          msgEl.textContent = 'You must be signed in to complete payment verification. Signing you in will continue the process.';
+          setTimeout(() => {
+            window.location.href = `/pages/auth/login.html?redirect=${encodeURIComponent(window.location.href)}`;
+          }, 1200);
+          return;
+        }
+
+        try {
+          const res = await fetch('/api/payments/verify', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ reference })
+          });
+
+          const data = await res.json();
+          const paid = data.order && (data.order.paymentStatus === 'Successful' || data.order.paymentStatus === 'Paid');
+          if (!res.ok || !data.order || !paid) {
+            msgEl.textContent = data.message || 'Payment verification failed. Contact support if you were charged.';
+            return;
+          }
+
+          const order = data.order || {};
+          const subtotal = order.subtotal || 0;
+          const delivery = order.deliveryFee || 0;
+          const discount = order.discount || 0;
+          const total = order.total || 0;
+          const payment = 'success';
+
+          const url = `confirmation.html?subtotal=${encodeURIComponent(subtotal)}&delivery=${encodeURIComponent(delivery)}&discount=${encodeURIComponent(discount)}&total=${encodeURIComponent(total)}&payment=${encodeURIComponent(payment)}&orderId=${encodeURIComponent(order.orderId || '')}&reference=${encodeURIComponent(reference)}`;
+          window.location.href = url;
+        } catch (err) {
+          msgEl.textContent = 'Unable to verify payment. Please try again later or contact support.';
+        }
+      })();
+    </script>
+  </body>
+</html>

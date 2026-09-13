@@ -54,9 +54,9 @@ function initMobileNav() {
   const navLinks = panel.querySelector('.mobile-nav-links');
   const fallbackLinks = [
     { label: 'Home', href: '../index.html' },
-    { label: 'Restaurants', href: '../resturant-page/index.html' },
+    { label: 'Restaurants', href: '/pages/restaurants/index.html' },
     { label: 'Offers', href: '../index.html#offers' },
-    { label: 'Account', href: '../auth.html' },
+    { label: 'Account', href: '/pages/auth/login.html' },
   ];
 
   const sourceLinks = nav

@@ -16,30 +16,41 @@ const buildUrl = (path) => {
   return `${base.replace(/\/$/, '')}${path}`;
 };
 
+/**
+ * Send an email notification. Never throws — a failed email must not
+ * fail the API request that triggered it (e.g. registration).
+ * Returns true when sent, false when skipped or failed.
+ */
 const sendEmail = async ({ to, subject, text, html }) => {
   if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
     console.warn('SMTP not configured. Email contents:', { to, subject, text });
     return false;
   }
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT) || 587,
-    secure: process.env.SMTP_SECURE === 'true',
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
-    }
-  });
+  try {
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT) || 587,
+      secure: process.env.SMTP_SECURE === 'true',
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+      }
+    });
 
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || 'no-reply@foodie.com',
-    to,
-    subject,
-    text,
-    html
-  });
-  return true;
+    await transporter.sendMail({
+      from: process.env.SMTP_FROM || 'no-reply@foodie.com',
+      to,
+      subject,
+      text,
+      html
+    });
+    return true;
+  } catch (error) {
+    // Log the SMTP failure (e.g. Gmail 535 BadCredentials) without crashing the request.
+    console.error(`Failed to send email to ${to}:`, error.message);
+    return false;
+  }
 };
 
 const createAuthToken = (user) => jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET, {
@@ -56,17 +67,25 @@ const sanitizeUser = (user) => ({
 });
 
 router.post('/register', asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
-  if (!username || !email || !password) {
-    return res.status(400).json({ message: 'Username, email, and password are required.' });
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required.' });
   }
 
-  // Avoid using Op.or to prevent runtime issues in some environments; check separately
+  // Check if email already exists
   const userByEmail = await User.findOne({ where: { email: email.toLowerCase() } });
   if (userByEmail) return res.status(409).json({ message: 'Email is already in use.' });
 
-  const userByUsername = await User.findOne({ where: { username } });
-  if (userByUsername) return res.status(409).json({ message: 'Username is already in use.' });
+  // Generate a username from email (part before '@') and ensure uniqueness
+  const baseUsername = email.split('@')[0];
+  let username = baseUsername;
+  let suffix = 0;
+  while (true) {
+    const userByUsername = await User.findOne({ where: { username } });
+    if (!userByUsername) break;
+    suffix++;
+    username = `${baseUsername}${suffix}`;
+  }
 
   // Auto-verify on signup to avoid blocking login by email verification
   const user = await User.create({
@@ -79,6 +98,14 @@ router.post('/register', asyncHandler(async (req, res) => {
 
   const token = createAuthToken(user);
 
+  // Send welcome email
+  await sendEmail({
+    to: user.email,
+    subject: 'Welcome to Foodie!',
+    text: `Hi ${user.name},\n\nThank you for creating an account with Foodie. We're excited to have you on board!\n\nBest regards,\nThe Foodie Team`,
+    html: `<p>Hi ${user.name},</p><p>Thank you for creating an account with Foodie. We're excited to have you on board!</p><p>Best regards,<br/>The Foodie Team</p>`
+  });
+
   res.status(201).json({
     user: sanitizeUser(user),
     token,
@@ -87,14 +114,14 @@ router.post('/register', asyncHandler(async (req, res) => {
 }));
 
 router.post('/login', asyncHandler(async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
-    return res.status(400).json({ message: 'Username and password are required.' });
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required.' });
   }
 
-  const user = await User.findOne({ where: { username } });
+  const user = await User.findOne({ where: { email: email.toLowerCase() } });
   if (!user || !(await user.comparePassword(password))) {
-    return res.status(401).json({ message: 'Invalid username or password.' });
+    return res.status(401).json({ message: 'Invalid email or password.' });
   }
 
   // With auto-verify on signup, this will rarely block, but keep the check for safety

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Cart | Foodie.</title>
+    <meta name="description" content="Review your cart and proceed to checkout with Foodie." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/styles/main.css" />
+    <script>
+      const savedTheme = localStorage.getItem('foodieTheme');
+      const defaultTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = defaultTheme;
+    </script>
+  </head>
+  <body>
+    <script src="/assets/scripts/page-guard.js" data-page="cart" data-expected-scripts='["/pages/cart/cart.js"]'></script>
+    <script src="/assets/scripts/auth-guard.js"></script>
+    <script>
+      // Protect this page - require authentication
+      checkAuth();
+    </script>
+    <div class="cart-overlay" aria-hidden="true"></div>
+    <div class="page-shell cart-open">
+      <header class="topbar cart-topbar">
+        <div class="brand-wrap">
+          <div class="brand-badge">🍽️</div>
+          <div>
+            <h1>Foodie.</h1>
+            <p>Your cart</p>
+          </div>
+        </div>
+
+        <nav class="nav-links">
+          <a href="/pages/home/index.html">Home</a>
+          <a href="/pages/home/index.html#restaurants">Restaurants</a>
+          <a href="/pages/home/index.html#offers">Offers</a>
+          <a href="/pages/auth/login.html">Account</a>
+        </nav>
+
+        <div class="topbar-right">
+          <div class="location-pill">Lagos, Nigeria</div>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme">🌙</button>
+          <button class="cart-pill" id="cartToggle" data-cart-target="cart.html" aria-label="Open cart">
+            <span>Cart</span>
+            <span class="cart-count" id="cartCount">0</span>
+          </button>
+          <a class="avatar-badge" id="profileLink" href="/pages/auth/login.html" aria-label="Sign in or sign up" data-auth="/pages/auth/login.html" data-account="/pages/auth/account.html" data-home="/pages/home/index.html">👩🏽</a>
+          <span class="profile-name" id="profileName"></span>
+        </div>
+      </header>
+
+      <main class="cart-layout">
+        <section class="cart-items-panel">
+          <div class="section-header">
+            <span class="eyebrow">Shopping cart</span>
+            <h2>Review your order</h2>
+          </div>
+
+          <div id="cartItems" class="cart-items-list">
+            <p class="empty-state">Your cart is empty. Add items from the menu to get started.</p>
+          </div>
+        </section>
+
+        <aside class="cart-summary-panel">
+          <div class="summary-card">
+            <span class="eyebrow">Order summary</span>
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <strong id="subtotalTotal">₦0.00</strong>
+            </div>
+            <div class="summary-row">
+              <span>Delivery</span>
+              <strong>₦500</strong>
+            </div>
+            <div class="summary-row">
+              <span>Discount</span>
+              <strong id="discountTotal">₦0.00</strong>
+            </div>
+            <div class="summary-row total-row">
+              <span>Total</span>
+              <strong id="grandTotal">₦0.00</strong>
+            </div>
+          </div>
+
+          <div class="summary-card promo-card">
+            <span class="eyebrow">Automatic offer</span>
+            <div class="promo-input-group">
+              <input id="promoCode" type="text" placeholder="Enter code" />
+              <button id="applyPromo" class="btn btn-primary" type="button">Apply</button>
+            </div>
+            <p class="muted-small">Every order includes a 10% discount on all items.</p>
+          </div>
+
+          <button class="btn btn-primary btn-full" id="proceedCheckout" type="button">Proceed to checkout</button>
+        </aside>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-copy">
+          <h4>Foodie.</h4>
+          <p>Fresh Nigerian food delivered fast. Browse restaurants, preview dishes, and order with confidence.</p>
+        </div>
+        <div class="footer-links">
+          <a href="/pages/home/index.html">Home</a>
+          <a href="/pages/restaurants/index.html">Restaurants</a>
+          <a href="/pages/auth/login.html">Account</a>
+        </div>
+        <div class="footer-contact">
+          <strong>Call us</strong>
+          <a href="tel:+2348140000000">+234 814 000 0000</a>
+          <div class="footer-hours">
+            <span>Open daily</span>
+            <span>10:00am – 11:00pm</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="/assets/scripts/utils.js"></script>
+    <script src="/assets/scripts/auth-state.js"></script>
+    <script src="/assets/scripts/cart-state.js"></script>
+    <script src="/assets/scripts/theme.js"></script>
+    <script src="/pages/cart/cart.js"></script>
+  </body>
+</html>

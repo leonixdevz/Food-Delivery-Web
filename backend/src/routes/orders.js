@@ -43,7 +43,7 @@ router.post('/', protect, asyncHandler(async (req, res) => {
     deliveryAddress,
   } = req.body;
 
-  const finalPaymentMethod = paymentMethod === 'simulated' ? 'simulated' : 'simulated';
+  const finalPaymentMethod = paymentMethod === 'opay' ? 'opay' : 'simulated';
 
   // Require at least one item
   if (!items || !Array.isArray(items) || items.length === 0) {
