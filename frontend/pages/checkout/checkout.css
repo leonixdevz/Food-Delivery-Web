@@ -1,40 +1,36 @@
 html,
 body {
   min-height: 100%;
-  height: 100%;
 }
 
 body {
-  background: linear-gradient(180deg, #fffaf3 0%, #fcefe1 36%, #f6ddc1 100%);
+  /* Full-page warm gradient that also fills dark mode (dark colors come from
+     main.css via the variables, so the old hard-coded light gradient is gone). */
+  background: linear-gradient(180deg, var(--bg) 0%, var(--surface-soft) 45%, var(--accent-soft) 100%);
 }
 
-.checkout-shell {
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: 0 0 28px;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background: transparent;
-  box-sizing: border-box;
+/* ──────────────────────────────────────────────
+ * Headings (scoped to the checkout shell only —
+ * the old global h1/h2 rules broke the topbar brand)
+ * ────────────────────────────────────────────── */
+
+.checkout-shell h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  line-height: 1.2;
 }
+
+/* ──────────────────────────────────────────────
+ * Topbar
+ * ────────────────────────────────────────────── */
 
 .checkout-topbar {
   position: sticky;
   top: 0;
   z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  width: 100%;
-  margin: 0;
-  padding: 14px 22px 10px;
-  border-bottom: 1px solid rgba(148, 133, 118, 0.2);
-  border-radius: 0;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
   backdrop-filter: blur(10px);
-  background: rgba(255, 250, 243, 0.85);
 }
 
 .checkout-topbar .brand-wrap {
@@ -52,46 +48,122 @@ body {
   flex-wrap: wrap;
 }
 
+/* ──────────────────────────────────────────────
+ * Stepper
+ * ────────────────────────────────────────────── */
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-width: 720px;
+  margin: 26px auto 0;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+  box-shadow: 0 12px 30px rgba(79, 38, 8, 0.07);
+}
+
+.stepper-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Numbered dot before each label */
+.stepper-step::before {
+  counter-increment: checkout-step;
+  content: counter(checkout-step);
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--surface);
+  color: var(--muted);
+}
+
+.stepper-step.current {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+.stepper-step.current::before {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ──────────────────────────────────────────────
+ * Layout
+ * ────────────────────────────────────────────── */
+
 .checkout-content {
-  display: grid;
-  gap: 24px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px 18px 40px;
 }
 
 .checkout-panel {
   display: grid;
-  gap: 24px;
+  gap: 10px;
 }
 
 .section-header {
-  display: grid;
-  gap: 10px;
-  margin-bottom: 4px;
+  margin: 22px 0 4px;
 }
 
 .section-header .eyebrow {
-  text-transform: uppercase;
-  font-size: 0.78rem;
-  letter-spacing: 0.16em;
-  color: var(--accent-dark);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--accent);
 }
 
 .section-header h2 {
   margin: 0;
-  font-size: clamp(2rem, 2.4vw, 2.5rem);
+  font-size: clamp(1.35rem, 2.4vw, 1.7rem);
 }
+
+/* ──────────────────────────────────────────────
+ * Cards
+ * ────────────────────────────────────────────── */
 
 .summary-card {
   background: var(--panel);
-  border-radius: 28px;
-  padding: 24px;
+  border-radius: 20px;
+  padding: 22px;
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
   display: grid;
-  gap: 18px;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
 }
 
+/* Varied treatments per card type */
 .order-summary-card {
-  background: var(--surface-soft);
+  background: linear-gradient(135deg, var(--surface-soft), var(--panel));
+  border-left: 4px solid var(--accent);
+}
+
+.address-card {
+  border-left: 4px solid var(--secondary, #10b981);
+}
+
+.payment-info-card {
+  border-left: 4px solid var(--accent-dark);
 }
 
 .summary-row {
@@ -103,11 +175,19 @@ body {
 }
 
 .total-row {
-  padding-top: 8px;
-  border-top: 1px solid rgba(148, 133, 118, 0.18);
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
   color: var(--text);
   font-size: 1.15rem;
   font-weight: 700;
+}
+
+/* The total amount line gets a warm serif accent */
+.total-row strong {
+  color: var(--accent);
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.25rem;
 }
 
 .card-header {
@@ -118,10 +198,86 @@ body {
   font-weight: 700;
 }
 
+/* ──────────────────────────────────────────────
+ * Order items (food thumbnails)
+ * ────────────────────────────────────────────── */
+
+.order-items-card {
+  padding: 18px 20px;
+}
+
+.order-items-count {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.order-items-list {
+  display: grid;
+  gap: 12px;
+}
+
+.order-item {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface-soft);
+}
+
+.order-item-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: var(--surface-muted);
+  box-shadow: 0 4px 10px rgba(79, 38, 8, 0.08);
+}
+
+.order-item-details h4 {
+  margin: 0 0 2px;
+  font-size: 0.98rem;
+  line-height: 1.3;
+}
+
+.order-item-details p {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.order-item-qty {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.order-item-price {
+  color: var(--text);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ──────────────────────────────────────────────
+ * Address
+ * ────────────────────────────────────────────── */
+
 .address-card .address-line {
   margin: 0;
   color: var(--text);
   line-height: 1.6;
+}
+
+.address-card .address-line + .address-line {
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
 .address-edit {
@@ -129,6 +285,11 @@ body {
   gap: 8px;
   color: var(--muted);
   font-weight: 600;
+}
+
+/* display:grid above would override the hidden attribute without this */
+.address-edit[hidden] {
+  display: none;
 }
 
 .address-edit input {
@@ -143,14 +304,69 @@ body {
 }
 
 .ghost-btn {
-  border: 1px solid rgba(31, 20, 10, 0.12);
+  border: 1px solid var(--border);
   background: transparent;
   color: var(--text);
   padding: 10px 16px;
-  border-radius: 14px;
+  border-radius: 12px;
   cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 
+.ghost-btn:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ──────────────────────────────────────────────
+ * Payment method selection
+ * ────────────────────────────────────────────── */
+
+.payment-options-card {
+  padding: 18px;
+}
+
+.payment-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.payment-option:hover {
+  border-color: var(--accent);
+}
+
+.payment-option:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 8px 22px rgba(255, 109, 35, 0.14);
+}
+
+.payment-option input[type='radio'] {
+  accent-color: var(--accent);
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+
+/* Legacy selector kept for safety */
 .payment-card label {
   display: flex;
   align-items: center;
@@ -158,13 +374,21 @@ body {
   width: 100%;
   padding: 14px 16px;
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 16px;
   background: var(--surface);
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.payment-card input[type="radio"] {
-  accent-color: var(--accent-dark);
+.payment-card label:hover,
+.payment-card label:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 6px 18px rgba(239, 68, 68, 0.12);
+}
+
+.payment-card input[type='radio'] {
+  accent-color: var(--accent);
   width: 18px;
   height: 18px;
 }
@@ -173,6 +397,10 @@ body {
   font-weight: 600;
 }
 
+/* ──────────────────────────────────────────────
+ * Payment panels (card + OPay)
+ * ────────────────────────────────────────────── */
+
 .btn-full {
   width: 100%;
 }
@@ -180,16 +408,17 @@ body {
 .demo-payment-panel {
   background: var(--surface-soft);
   border: 1px solid var(--border);
-  border-radius: 28px;
-  padding: 24px;
+  border-left: 4px solid var(--accent);
+  border-radius: 20px;
+  padding: 22px;
   display: grid;
   gap: 16px;
 }
 
 .demo-payment-panel .card-header strong {
-  color: var(--accent-dark);
-  font-size: 0.76rem;
-  letter-spacing: 0.12em;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
 }
 
 .demo-field-row {
@@ -209,12 +438,22 @@ body {
 .demo-field select {
   width: 100%;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 12px;
   padding: 12px 14px;
   background: var(--surface);
   color: var(--text);
   font: inherit;
   box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.demo-field input:focus,
+.demo-field select:focus,
+.address-edit input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .demo-payment-note {
@@ -224,19 +463,157 @@ body {
   line-height: 1.5;
 }
 
+/* OPay panel — key point: display must stay grid when visible so the
+   [hidden] attribute can work (a display:flex rule would override it). */
+.opay-payment-panel {
+  background: var(--panel);
+  border: 1px solid rgba(13, 176, 75, 0.25);
+  border-left: 4px solid #0db04b;
+  border-radius: 20px;
+  padding: 22px;
+  display: grid;
+  gap: 16px;
+}
+
+.opay-payment-panel[hidden],
+.demo-payment-panel[hidden],
+.payment-info-card[hidden] {
+  display: none;
+}
+
+.opay-payment-panel .card-header strong {
+  color: #0db04b;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.opay-steps {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.opay-steps li::marker {
+  color: #0db04b;
+  font-weight: 700;
+}
+
+.opay-account-card {
+  border: 1px dashed rgba(13, 176, 75, 0.45);
+  border-radius: 14px;
+  background: rgba(13, 176, 75, 0.06);
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.opay-account-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.opay-account-label {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.opay-number-row strong {
+  font-size: 1.25rem;
+  letter-spacing: 2px;
+  color: #0db04b;
+  user-select: all;
+}
+
+.opay-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.opay-action-btn {
+  flex: 1 1 160px;
+}
+
+/* ──────────────────────────────────────────────
+ * Confirmation page
+ * ────────────────────────────────────────────── */
+
 .confirmation-shell {
   min-height: 100vh;
   display: grid;
   place-items: center;
   padding: 36px 18px;
-  background: var(--bg);
+}
+
+/* Status tint on the whole card: success / pending / declined */
+.confirmation-success {
+  border-top: 4px solid var(--secondary, #10b981);
+}
+
+.confirmation-pending {
+  border-top: 4px solid var(--accent);
+}
+
+.confirmation-declined {
+  border-top: 4px solid #ef4444;
+}
+
+.confirmation-success .confirmation-badge {
+  box-shadow: inset 0 0 0 2px rgba(16, 185, 129, 0.25);
+}
+
+/* Summary card accent follows the payment outcome */
+.confirmation-pending .confirmation-summary-card {
+  border-left-color: var(--accent);
+}
+
+.confirmation-declined .confirmation-summary-card {
+  border-left-color: #ef4444;
+}
+
+.confirmation-pending .confirmation-badge {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  box-shadow: inset 0 0 0 2px rgba(255, 109, 35, 0.25);
+}
+
+.confirmation-declined .confirmation-badge {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  box-shadow: inset 0 0 0 2px rgba(239, 68, 68, 0.25);
+}
+
+/* Payment reference chip */
+.confirmation-reference {
+  margin: 0;
+  justify-self: center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px dashed var(--border);
+  background: var(--surface-soft);
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  user-select: all;
+}
+
+.confirmation-summary-card .card-header {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .confirmation-card {
   width: min(640px, 100%);
   text-align: center;
   padding: 42px 32px;
-  border-radius: 32px;
+  border-radius: 24px;
   background: var(--panel);
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
@@ -251,9 +628,10 @@ body {
   display: grid;
   place-items: center;
   margin: 0 auto;
-  background: #e9f8f0;
-  color: #0b6b3d;
+  background: var(--accent-soft);
+  color: var(--secondary, #10b981);
   font-size: 2.75rem;
+  box-shadow: inset 0 0 0 2px rgba(16, 185, 129, 0.2);
 }
 
 .confirmation-card h1 {
@@ -271,11 +649,16 @@ body {
 .confirmation-detail-card {
   background: var(--surface);
   padding: 22px 24px;
-  border-radius: 24px;
+  border-radius: 20px;
   border: 1px solid var(--border);
   text-align: left;
   display: grid;
   gap: 12px;
+  border-left: 4px solid var(--secondary, #10b981);
+}
+
+.confirmation-detail-card {
+  border-left: 4px solid var(--accent-dark);
 }
 
 .confirmation-summary-card .summary-row,
@@ -289,10 +672,29 @@ body {
 
 .confirmation-summary-card .total-row,
 .confirmation-detail-card .total-row {
-  border-top: 1px solid rgba(148, 133, 118, 0.18);
+  border-top: 1px dashed var(--border);
   padding-top: 12px;
   color: var(--text);
   font-weight: 700;
+}
+
+/* The paid amount gets the same serif treatment as the checkout total */
+.confirmation-summary-card .total-row strong {
+  color: var(--accent);
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.confirmation-detail-card p {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+html[data-theme='dark'] .confirmation-reference,
+body[data-theme='dark'] .confirmation-reference {
+  background: var(--surface-muted);
 }
 
 .confirmation-detail-card .card-header {
@@ -309,9 +711,62 @@ body {
   width: 100%;
 }
 
+/* ──────────────────────────────────────────────
+ * Dark mode
+ * ────────────────────────────────────────────── */
+
+html[data-theme='dark'] body,
+body[data-theme='dark'] body {
+  background: linear-gradient(180deg, #0f1015 0%, #151823 45%, #332815 100%);
+}
+
+html[data-theme='dark'] .stepper,
+body[data-theme='dark'] .stepper {
+  background: var(--panel);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+html[data-theme='dark'] .order-item,
+body[data-theme='dark'] .order-item {
+  background: var(--surface-muted);
+  border-color: var(--border);
+  box-shadow: none;
+}
+
+html[data-theme='dark'] .opay-payment-panel,
+body[data-theme='dark'] .opay-payment-panel {
+  border-color: rgba(13, 176, 75, 0.35);
+}
+
+html[data-theme='dark'] .opay-account-card,
+body[data-theme='dark'] .opay-account-card {
+  background: rgba(13, 176, 75, 0.1);
+}
+
+html[data-theme='dark'] .opay-number-row strong,
+html[data-theme='dark'] .opay-payment-panel .card-header strong,
+body[data-theme='dark'] .opay-number-row strong,
+body[data-theme='dark'] .opay-payment-panel .card-header strong {
+  color: #2fd670;
+}
+
+/* ──────────────────────────────────────────────
+ * Responsive
+ * ────────────────────────────────────────────── */
+
 @media (max-width: 760px) {
-  .checkout-shell {
-    padding: 22px 14px;
+  .stepper {
+    border-radius: 20px;
+    gap: 4px;
+  }
+
+  .stepper-step {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+
+  .checkout-content {
+    padding: 22px 14px 32px;
   }
 
   .checkout-topbar {
@@ -319,7 +774,6 @@ body {
     justify-content: center;
     text-align: center;
     gap: 10px;
-    padding: 12px 14px;
   }
 
   .checkout-topbar .brand-wrap {
@@ -332,22 +786,20 @@ body {
     justify-content: center;
   }
 
-  .checkout-topbar .nav-links {
-    display: none;
-  }
-
+  .checkout-topbar .nav-links,
   .checkout-topbar .location-pill {
     display: none;
   }
 
   .summary-card,
   .demo-payment-panel,
+  .opay-payment-panel,
   .confirmation-card {
     padding: 18px 16px;
   }
 
-  .section-header h2 {
-    font-size: 1.9rem;
+  .payment-options {
+    grid-template-columns: 1fr;
   }
 
   .card-header {
@@ -357,16 +809,19 @@ body {
 }
 
 @media (max-width: 520px) {
-  .checkout-shell {
-    padding: 14px 10px 20px;
+  .stepper {
+    margin-top: 18px;
   }
 
-  .checkout-topbar {
-    padding: 10px 12px;
+  .stepper-step {
+    padding: 5px 8px;
+    font-size: 0.75rem;
   }
 
-  .brand-wrap h1 {
-    font-size: 1.06rem;
+  .stepper-step::before {
+    width: 19px;
+    height: 19px;
+    font-size: 0.68rem;
   }
 
   .summary-row,
@@ -376,7 +831,7 @@ body {
     font-size: 0.92rem;
   }
 
-  .payment-card label {
+  .payment-option {
     padding: 12px 14px;
   }
 
@@ -388,5 +843,19 @@ body {
 
   .demo-field-row {
     grid-template-columns: 1fr;
+  }
+
+  .order-item {
+    grid-template-columns: 52px 1fr;
+  }
+
+  .order-item-image {
+    width: 52px;
+    height: 52px;
+  }
+
+  .order-item-price {
+    grid-column: 2;
+    justify-self: start;
   }
 }

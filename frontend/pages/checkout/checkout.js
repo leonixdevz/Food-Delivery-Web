@@ -17,6 +17,10 @@
  * DOM References
  * ────────────────────────────────────────────── */
 
+// Order items list (food thumbnails)
+const orderItemsList = document.getElementById('orderItemsList');
+const orderItemsCount = document.getElementById('orderItemsCount');
+
 // Summary display elements
 const subtotalDisplay = document.getElementById('subtotalAmount');
 const deliveryFeeDisplay = document.getElementById('deliveryAmount');
@@ -209,6 +213,78 @@ function toggleBankTransferDetails() {
  * ────────────────────────────────────────────── */
 
 /**
+ * Resolve a cart item's image path to a served URL.
+ * Handles absolute URLs, data URIs, and project-relative paths such as
+ * "/assets/images/Jollof Rice With Chicken.jpeg" (saved by the menu page).
+ *
+ * @param {string} rawImagePath - The raw image path from the cart item.
+ * @returns {string} A resolved, encoded image URL.
+ */
+function resolveItemImagePath(rawImagePath) {
+  if (!rawImagePath) return DEFAULT_ITEM_IMAGE;
+  if (/^https?:\/\//i.test(rawImagePath) || rawImagePath.startsWith('data:')) {
+    return rawImagePath;
+  }
+
+  let cleanPath = rawImagePath.trim().replace(/^(\.\.\/|\.)/, '').replace(/^\//, '');
+
+  try {
+    cleanPath = decodeURI(cleanPath);
+  } catch (_decodeError) {
+    // Keep original if decoding fails
+  }
+
+  if (cleanPath.startsWith('assets/images/')) {
+    return `/${encodeURI(cleanPath)}`;
+  }
+
+  return `/assets/images/${encodeURI(cleanPath)}`;
+}
+
+/**
+ * Render the order items card with a thumbnail, name, category, and
+ * line total for every item in the cart.
+ */
+function renderOrderItems() {
+  if (!orderItemsList) return;
+
+  const cart = loadCart();
+
+  if (orderItemsCount) {
+    const itemCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    orderItemsCount.textContent = `${itemCount} ${itemCount === 1 ? 'item' : 'items'}`;
+  }
+
+  if (cart.length === 0) {
+    orderItemsList.innerHTML = '<p class="empty-state">Your cart is empty. Add items to continue.</p>';
+    return;
+  }
+
+  orderItemsList.innerHTML = cart
+    .map((item) => {
+      const unitPrice = parsePrice(item.price);
+      const quantity = item.quantity || 1;
+      const lineTotal = unitPrice * quantity;
+      const safeName = escapeHtml(item.name);
+      const safeCategory = escapeHtml(item.category || 'Food');
+      const safeImage = escapeHtml(resolveItemImagePath(item.image));
+
+      return `
+        <div class="order-item">
+          <img class="order-item-image" src="${safeImage}" alt="${safeName}" loading="lazy" />
+          <div class="order-item-details">
+            <h4>${safeName}</h4>
+            <p>${safeCategory}</p>
+            <span class="order-item-qty">Qty ${quantity}</span>
+          </div>
+          <strong class="order-item-price">${formatPrice(lineTotal)}</strong>
+        </div>
+      `;
+    })
+    .join('');
+}
+
+/**
  * Calculate order totals from the cart and refresh the summary display.
  * Delivery fee is fixed at ₦500; discount is 10% of subtotal.
  */
@@ -225,6 +301,7 @@ function refreshOrderSummary() {
   if (grandTotalDisplay) grandTotalDisplay.textContent = formatPrice(grandTotal);
   if (placeOrderButton) placeOrderButton.disabled = cart.length === 0;
 
+  renderOrderItems();
   togglePaymentInfoPanels();
   toggleBankTransferDetails(grandTotal);
 }
@@ -657,6 +734,9 @@ async function confirmOpayPayment() {
 paymentMethodRadios.forEach((radio) => {
   radio.addEventListener('change', refreshOrderSummary);
 });
+
+// Re-render items if the cart changes in another tab
+window.addEventListener('storage', renderOrderItems);
 
 // Handle payment proof file selection
 if (paymentProofFileInput) {

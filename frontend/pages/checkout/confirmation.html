@@ -8,11 +8,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/assets/styles/main.css" />
-    <link rel="stylesheet" href="/assets/styles/auth-toast.css" />
+    <link rel="stylesheet" href="checkout.css" />
     <script src="/assets/scripts/page-guard.js" data-page="confirmation" data-expected-scripts='[]'></script>
     <script>
       const savedTheme = localStorage.getItem('foodieTheme');
@@ -50,12 +50,17 @@
       </header>
 
       <main class="confirmation-shell">
-        <section class="confirmation-card">
+        <section class="confirmation-card" id="confirmationCard">
           <div class="confirmation-badge" id="confirmationBadge">✅</div>
           <h1 id="confirmationHeading">Order confirmed!</h1>
           <p id="confirmationMessage">Your order is confirmed and we’re preparing it now. Expect delivery soon.</p>
 
+          <p class="confirmation-reference" id="transactionReference" hidden></p>
+
           <div class="confirmation-summary-card">
+            <div class="card-header">
+              <span>Payment summary</span>
+            </div>
             <div class="summary-row">
               <span>Subtotal</span>
               <strong id="subtotalDisplay">₦0.00</strong>
@@ -86,7 +91,6 @@
               <span>Payment method</span>
             </div>
             <p id="paymentMethod">Cash on Delivery</p>
-              <p id="transactionReference" hidden></p>
           </div>
 
           <div class="confirmation-actions">
@@ -104,6 +108,7 @@
         <div class="footer-links">
           <a href="/pages/home/index.html">Home</a>
           <a href="/pages/restaurants/index.html">Restaurants</a>
+          <a href="/pages/home/index.html#offers">Offers</a>
           <a href="/pages/auth/login.html">Account</a>
         </div>
         <div class="footer-contact">
@@ -117,6 +122,7 @@
       </footer>
     </div>
 
+    <script src="/assets/scripts/utils.js"></script>
     <script src="/assets/scripts/auth-state.js"></script>
     <script src="/assets/scripts/theme.js"></script>
     <script>
@@ -128,24 +134,32 @@
       const payment = params.get('payment') || 'success';
       const address = params.get('address') || '12, Freedom Way, Lekki Phase 1, Lagos, Nigeria';
 
+      const badgeEl = document.getElementById('confirmationBadge');
+      const headingEl = document.getElementById('confirmationHeading');
+      const messageEl = document.getElementById('confirmationMessage');
+      const cardEl = document.getElementById('confirmationCard');
+
       if (payment === 'declined') {
-        document.getElementById('confirmationBadge').textContent = '⚠️';
-        document.getElementById('confirmationHeading').textContent = 'Payment declined';
-        document.getElementById('confirmationMessage').textContent = 'This demo payment was declined. No real money was charged.';
+        badgeEl.textContent = '⚠️';
+        headingEl.textContent = 'Payment declined';
+        messageEl.textContent = 'This demo payment was declined. No real money was charged.';
+        cardEl.classList.add('confirmation-declined');
       } else if (payment === 'pending') {
-        document.getElementById('confirmationBadge').textContent = '⏳';
-        document.getElementById('confirmationHeading').textContent = 'Payment pending';
-        document.getElementById('confirmationMessage').textContent = 'Your payment is being processed. We will update your order once it is confirmed.';
+        badgeEl.textContent = '⏳';
+        headingEl.textContent = 'Payment pending';
+        messageEl.textContent = 'Your payment is being processed. We will update your order once it is confirmed.';
+        cardEl.classList.add('confirmation-pending');
       } else {
-        document.getElementById('confirmationBadge').textContent = '✅';
-        document.getElementById('confirmationHeading').textContent = 'Payment successful';
-        document.getElementById('confirmationMessage').textContent = 'Your order has been confirmed and is being prepared for delivery.';
+        badgeEl.textContent = '✅';
+        headingEl.textContent = 'Payment successful';
+        messageEl.textContent = 'Your order has been confirmed and is being prepared for delivery.';
+        cardEl.classList.add('confirmation-success');
       }
 
-      document.getElementById('subtotalDisplay').textContent = `₦${subtotal.toLocaleString('en-NG')}`;
-      document.getElementById('deliveryDisplay').textContent = `₦${delivery.toLocaleString('en-NG')}`;
-      document.getElementById('discountDisplay').textContent = `₦${discount.toLocaleString('en-NG')}`;
-      document.getElementById('confirmationTotal').textContent = `₦${total.toLocaleString('en-NG')}`;
+      document.getElementById('subtotalDisplay').textContent = formatPrice(subtotal);
+      document.getElementById('deliveryDisplay').textContent = formatPrice(delivery);
+      document.getElementById('discountDisplay').textContent = formatPrice(discount);
+      document.getElementById('confirmationTotal').textContent = formatPrice(total);
       document.getElementById('deliveryAddress').textContent = address;
       document.getElementById('paymentMethod').textContent = payment === 'declined'
         ? 'Demo payment declined'

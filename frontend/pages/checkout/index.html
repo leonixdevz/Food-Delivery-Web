@@ -8,10 +8,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/assets/styles/main.css" />
+    <link rel="stylesheet" href="checkout.css" />
     <script>
       const savedTheme = localStorage.getItem('foodieTheme');
       const defaultTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -53,11 +54,34 @@
         </div>
       </header>
 
+      <!-- Stepper -->
+      <div class="stepper">
+        <div class="stepper-step current" data-step="summary">
+          <span class="stepper-label">Order summary</span>
+        </div>
+        <div class="stepper-step" data-step="address">
+          <span class="stepper-label">Delivery address</span>
+        </div>
+        <div class="stepper-step" data-step="payment">
+          <span class="stepper-label">Payment</span>
+        </div>
+      </div>
+
       <main class="checkout-content">
         <section class="checkout-panel">
+          <!-- Order Summary -->
           <div class="section-header">
-            <span class="eyebrow">Order summary</span>
             <h2>Order summary</h2>
+          </div>
+
+          <div class="summary-card order-items-card">
+            <div class="card-header">
+              <span>Your items</span>
+              <span class="order-items-count" id="orderItemsCount">0 items</span>
+            </div>
+            <div class="order-items-list" id="orderItemsList">
+              <p class="empty-state">Your cart is empty. Add items to continue.</p>
+            </div>
           </div>
 
           <div class="summary-card order-summary-card">
@@ -79,6 +103,11 @@
             </div>
           </div>
 
+          <!-- Delivery Address -->
+          <div class="section-header">
+            <h2>Delivery address</h2>
+          </div>
+
           <div class="summary-card address-card">
             <div class="card-header">
               <span>Delivery address</span>
@@ -89,8 +118,16 @@
               Delivery address
               <input id="deliveryAddressInput" type="text" value="12, Freedom Way, Lekki Phase 1, Lagos, Nigeria" autocomplete="street-address" />
             </label>
-              <p class="address-line">Doorstep delivery available from 10:00am to 11:00pm daily.</p>
-            <div class="payment-card payment-options">
+            <p class="address-line">Doorstep delivery available from 10:00am to 11:00pm daily.</p>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="section-header">
+            <h2>Payment method</h2>
+          </div>
+
+          <div class="summary-card payment-options-card">
+            <div class="payment-options">
               <label class="payment-option">
                 <input type="radio" name="payment" value="demo" checked />
                 <span>💳 Card (demo)</span>
@@ -102,18 +139,18 @@
             </div>
           </div>
 
-          <div class="summary-card payment-info-card">
-            <div id="paymentInfoSimulated" class="payment-info">
-              <div class="card-header">
-                <span>Payment</span>
-              </div>
-              <p>Pay with a card. No real payment provider is contacted, and no money is charged.</p>
-            </div>
-          </div>
-
-          <div class="demo-payment-panel" id="demoPaymentPanel">
+          <!-- Simulated Payment Details (Card) -->
+          <div class="summary-card payment-info-card" id="paymentInfoSimulated">
             <div class="card-header">
               <span>Payment details</span>
+            </div>
+            <p>Pay with a card. No real payment provider is contacted, and no money is charged.</p>
+          </div>
+
+          <!-- Demo Payment Panel -->
+          <div class="demo-payment-panel" id="demoPaymentPanel">
+            <div class="card-header">
+              <span>Card details</span>
               <strong>SIMULATED</strong>
             </div>
             <label class="demo-field">
@@ -145,6 +182,7 @@
             <p class="demo-payment-note">Use any demo card details. This checkout never contacts Paystack, a bank, or a card network.</p>
           </div>
 
+          <!-- OPay Payment Panel -->
           <div class="opay-payment-panel" id="opayPaymentPanel" hidden>
             <div class="card-header">
               <span>Pay with OPay</span>
@@ -181,6 +219,7 @@
             <p class="demo-payment-note" id="opayConfigWarning" hidden>⚠️ OPay account number is not configured on the server yet. Set OPAY_ACCOUNT_NUMBER (and optionally OPAY_ACCOUNT_NAME, OPAY_BANK_NAME) in backend/.env.</p>
           </div>
 
+          <!-- Place Order Button -->
           <button class="btn btn-primary btn-full" id="placeOrderBtn" type="button">Place order</button>
         </section>
       </main>
@@ -193,6 +232,7 @@
         <div class="footer-links">
           <a href="/pages/home/index.html">Home</a>
           <a href="/pages/restaurants/index.html">Restaurants</a>
+          <a href="/pages/home/index.html#offers">Offers</a>
           <a href="/pages/auth/login.html">Account</a>
         </div>
         <div class="footer-contact">

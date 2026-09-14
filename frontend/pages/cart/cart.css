@@ -6,15 +6,22 @@ body {
 
 body {
   position: relative;
-  background: raif i push the project to github will it still host it locallydial-gradient(circle at top, rgba(255, 181, 96, 0.25), transparent 28%), linear-gradient(180deg, #fffaf3 0%, #fdf1e8 34%, #f7e1cb 100%);
+  background: radial-gradient(circle at top, rgba(239, 68, 68, 0.12), transparent 28%), linear-gradient(180deg, var(--bg) 0%, #fefae8 34%, var(--accent-soft) 100%);
   color: var(--text);
   min-height: 100vh;
 }
 
+/* Typography hierarchy for cart */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
 html[data-theme='dark'] body,
 body[data-theme='dark'] {
-  background: radial-gradient(circle at top, rgba(255, 183, 107, 0.12), transparent 24%), linear-gradient(180deg, #0f1015 0%, #10131c 36%, #171a26 100%);
-  color: #e4e3ec;
+  background: radial-gradient(circle at top, rgba(239, 68, 68, 0.08), transparent 24%), linear-gradient(180deg, var(--bg) 0%, #10131c 36%, #171a26 100%);
+  color: var(--text);
 }
 
 .cart-overlay {
@@ -38,8 +45,8 @@ body[data-theme='dark'] {
   min-height: min(820px, 84vh);
   max-height: calc(100vh - 56px);
   box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--border);
   border-radius: 0;
   box-shadow: none;
   backdrop-filter: blur(16px);
@@ -136,19 +143,19 @@ body[data-theme='dark'] .cart-topbar {
 }
 
 .cart-items-panel {
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 30px;
+  background: var(--panel);
+  border-radius: 24px;
   padding: 28px;
-  box-shadow: 0 18px 50px rgba(51, 27, 9, 0.08);
-  border: 1px solid rgba(148, 133, 118, 0.14);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
 }
 
 .cart-summary-panel {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 245, 236, 0.94));
-  border-radius: 30px;
+  background: linear-gradient(180deg, var(--panel), var(--surface-soft));
+  border-radius: 24px;
   padding: 24px 22px;
-  box-shadow: 0 22px 52px rgba(51, 27, 9, 0.12);
-  border: 1px solid rgba(148, 133, 118, 0.12);
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--secondary);
   color: var(--text);
   align-self: center;
   position: sticky;
@@ -184,7 +191,7 @@ body[data-theme='dark'] .cart-item {
 
 html[data-theme='dark'] .qty-btn,
 body[data-theme='dark'] .qty-btn {
-  background: linear-gradient(135deg, #ffb869, #ff7d2d);
+  background: var(--accent);
   color: #fff;
 }
 
@@ -253,16 +260,15 @@ body[data-theme='dark'] .site-footer {
 
 .cart-summary-panel .btn,
 .cart-summary-panel .btn-primary {
-  
-  background: #ff9500;
-  color: var(--text);
-  border: 1px solid var(--border);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.04);
+  background: var(--accent);
+  color: white;
+  border: none;
+  box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2);
 }
 
 .cart-summary-panel .btn-primary:hover,
 .cart-summary-panel .btn:hover {
-  background: var(--accent);
+  background: var(--accent-dark);
 }
 
 .section-header h2 {
@@ -320,12 +326,16 @@ body[data-theme='dark'] .site-footer {
   width: 34px;
   height: 34px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #ffb869, #ff7d2d);
+  background: var(--accent);
   border: none;
   color: white;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 10px 20px rgba(255, 125, 45, 0.2);
+  box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2);
+}
+
+.qty-btn:hover {
+  background: var(--accent-dark);
 }
 
 .cart-item-meta {

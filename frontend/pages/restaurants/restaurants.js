@@ -2,8 +2,12 @@ function normalizeRestaurantImagePath(imagePath) {
   if (!imagePath) return imagePath;
   if (/^https?:\/\//i.test(imagePath) || imagePath.startsWith('data:')) return encodeURI(imagePath);
   let normalized = imagePath.trim();
-  normalized = normalized.replace(/^(\.\.\/|\.\/)/, '');
-  normalized = normalized.replace(/^images\//, '');
+  // Strip project-relative prefixes: "../", "./", a leading "/", "images/",
+  // and an already-resolved "assets/images/" so paths saved by other pages
+  // (e.g. "/assets/images/Chicken 3.jpeg") don't get double-prefixed.
+  normalized = normalized.replace(/^(\.\.\/|\.\/)+/, '');
+  if (normalized.startsWith('/')) normalized = normalized.slice(1);
+  normalized = normalized.replace(/^images\//, '').replace(/^assets\/images\//, '');
   try {
     normalized = decodeURI(normalized);
   } catch (error) {
@@ -64,14 +68,16 @@ const defaultRestaurants = [
       { name: "Rice & Chicken Box", category: "rice", price: "₦3,500", image: "/assets/images/Jollof Rice With Chicken.jpeg", desc: "Flavor-packed rice with chicken and sauce." },
       // { name: "Crispy Chicken Wings", category: "chicken", price: "₦3,900", image: "/assets/images/Jollof Rice With Chicken.jpeg", desc: "Finger-licking wings tossed in spicy seasoning." },
       { name: "Loaded Fries & Ketchup", category: "snacks", price: "₦3,000", image: "/assets/images/fries.jpeg", desc: "Crispy fries with crunchy chicken nuggets and dip." },
+      // NOTE: several older image files (iced-tea.jpeg, plantain-chips.jpeg, …) do not exist on disk;
+      // those dishes are mapped to existing assets so cards never fall back to a placeholder.
       // { name: "Family Chicken Feast", category: "chicken", price: "₦8,200", image: "/assets/images/Jollof Rice With Chicken.jpeg", desc: "A large combo for sharing with crispy chicken, rice, and sides." },
       // { name: "Hot Wings Combo", category: "snacks", price: "₦4,200", image: "/assets/images/daisy.jpeg", desc: "Extra spicy wings with a creamy dip and fries." },
       { name: "Sausage Roll", category: "snacks", price: "₦800", image: "/assets/images/Sausage%20Roll%20Recipe%20(Picnic%20Idea).jpeg", desc: "Warm sausage roll with flaky pastry and savory filling." },
       { name: "Sneaker Chocolate", category: "snacks", price: "₦1,000", image: "/assets/images/Sneaker%20Chocolate.jpeg", desc: "Rich chocolate snack bar with a crunchy bite." },
-      { name: "Iced Tea", category: "drinks", price: "₦700", image: "/assets/images/iced-tea.jpeg", desc: "Chilled lemon iced tea to refresh your meal." },
-      { name: "Plantain Chips", category: "snacks", price: "₦600", image: "/assets/images/plantain-chips.jpeg", desc: "Crunchy plantain chips lightly salted." },
-      { name: "Coleslaw", category: "sides", price: "₦500", image: "/assets/images/coleslaw.jpeg", desc: "Fresh cabbage coleslaw with a creamy dressing." },
-      { name: "Chocolate Milkshake", category: "drinks", price: "₦1,200", image: "/assets/images/milkshake.jpeg", desc: "Thick chocolate milkshake topped with cream." },
+      { name: "Iced Tea", category: "drinks", price: "₦700", image: "/assets/images/zobo.jpeg", desc: "Chilled lemon iced tea to refresh your meal." },
+      { name: "Plantain Chips", category: "snacks", price: "₦600", image: "/assets/images/fries.jpeg", desc: "Crunchy plantain chips lightly salted." },
+      { name: "Coleslaw", category: "sides", price: "₦500", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80", desc: "Fresh cabbage coleslaw with a creamy dressing." },
+      { name: "Chocolate Milkshake", category: "drinks", price: "₦1,200", image: "/assets/images/kunu.jpeg", desc: "Thick chocolate milkshake topped with cream." },
       { name: "Classic Jollof Rice", category: "rice", price: "₦3,900", image: "/assets/images/Jollof Rice With Chicken.jpeg", desc: "Spicy jollof rice served with chicken and plantain." },
       { name: "Coke Bottle", category: "drinks", price: "₦900", image: "/assets/images/Coca Cola - Katrin Leo Pako.jpeg", desc: "Chilled Coca-Cola to refresh your meal." },
       { name: "7Up Bottle", category: "drinks", price: "₦900", image: "/assets/images/7up.jpeg", desc: "Crisp 7Up soda for a refreshing lift." },
@@ -100,9 +106,9 @@ const defaultRestaurants = [
       { name: "Kunu", category: "drinks", price: "₦1,000", image: "/assets/images/kunu pepper.jpeg", desc: "A traditional non-alcoholic drink with a creamy grain taste." },
       { name: "Garden Salad Plate", category: "salads", price: "₦2,900", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80", desc: "Fresh salad with cucumber, tomatoes, and avocado." },
       { name: "Zobo Bottle", category: "drinks", price: "₦700", image: "/assets/images/zobo.jpeg", desc: "Chilled zobo made with hibiscus and ginger." },
-      { name: "Pepper Soup (Small)", category: "soups", price: "₦1,200", image: "/assets/images/pepper-soup.jpeg", desc: "Light pepper soup to warm the stomach." },
-      { name: "Plantain (Fried)", category: "sides", price: "₦600", image: "/assets/images/plantain.jpeg", desc: "Fried ripe plantain to complement your meal." },
-      { name: "Protein Salad", category: "salads", price: "₦2,500", image: "/assets/images/protein-salad.jpeg", desc: "Mixed greens with egg, tuna and beans." },
+      { name: "Pepper Soup (Small)", category: "soups", price: "₦1,200", image: "/assets/images/images.jpeg", desc: "Light pepper soup to warm the stomach." },
+      { name: "Plantain (Fried)", category: "sides", price: "₦600", image: "/assets/images/fries.jpeg", desc: "Fried ripe plantain to complement your meal." },
+      { name: "Protein Salad", category: "salads", price: "₦2,500", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80", desc: "Mixed greens with egg, tuna and beans." },
       { name: "Semo & Afang", category: "swallow", price: "₦4,800", image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80", desc: "Smooth semo with afang soup and assorted meat." },
       { name: "Yam Porridge", category: "rice", price: "₦3,600", image: "/assets/images/images.jpeg", desc: "Creamy yam porridge with fish and aromatic peppers." },
       { name: "Banga Soup Pack", category: "soups", price: "₦4,700", image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80", desc: "Traditional banga soup served with fresh starch and meat." },
@@ -132,10 +138,10 @@ const defaultRestaurants = [
       { name: "Veggie Pizza", category: "pizza", price: "₦4,700", image: "/assets/images/Delicious%20pizza.jpeg", desc: "Fresh vegetables and a creamy cheese finish." },
       { name: "Chicken Tikka Pizza", category: "pizza", price: "₦6,000", image: "/assets/images/Delicious%20pizza.jpeg", desc: "A spicy pizza with grilled chicken and peppers." },
       { name: "Chocolate Lava Cake", category: "desserts", price: "₦2,600", image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=900&q=80", desc: "Warm chocolate cake with a soft melt-in-the-mouth center." },
-      { name: "Garlic Bread", category: "sides", price: "₦900", image: "/assets/images/garlic-bread.jpeg", desc: "Toasted garlic bread with herb butter." },
-      { name: "BBQ Chicken Wings", category: "snacks", price: "₦2,800", image: "/assets/images/wings.jpeg", desc: "Sticky BBQ wings with a side of dip." },
-      { name: "Iced Cappuccino", category: "drinks", price: "₦1,500", image: "/assets/images/iced-coffee.jpeg", desc: "Chilled cappuccino with a coffee kick." },
-      { name: "Fruit Salad", category: "desserts", price: "₦1,200", image: "/assets/images/fruit-salad.jpeg", desc: "Seasonal fruit bowl with a light syrup." },
+      { name: "Garlic Bread", category: "sides", price: "₦900", image: "/assets/images/Sausage%20Roll%20Recipe%20(Picnic%20Idea).jpeg", desc: "Toasted garlic bread with herb butter." },
+      { name: "BBQ Chicken Wings", category: "snacks", price: "₦2,800", image: "/assets/images/TASTY FRIED CHICKEN IN 2025.jpeg", desc: "Sticky BBQ wings with a side of dip." },
+      { name: "Iced Cappuccino", category: "drinks", price: "₦1,500", image: "/assets/images/kunu.jpeg", desc: "Chilled cappuccino with a coffee kick." },
+      { name: "Fruit Salad", category: "desserts", price: "₦1,200", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80", desc: "Seasonal fruit bowl with a light syrup." },
       { name: "Vanilla Ice Cream", category: "desserts", price: "₦1,800", image: "https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=900&q=80", desc: "Sweet frozen treat with a creamy vanilla finish." },
       { name: "Brownie Slice", category: "desserts", price: "₦2,200", image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=900&q=80", desc: "A rich brownie served warm with chocolate drizzle." },
       { name: "Fried Rice Bowl", category: "rice", price: "₦3,800", image: "/assets/images/Jollof Rice With Chicken.jpeg", desc: "Flavorful fried rice with vegetables and chicken." },
@@ -168,10 +174,10 @@ const defaultRestaurants = [
       { name: "Chicken Bacon Burger", category: "burgers", price: "₦6,000", image: "https://images.unsplash.com/photo-1550317138-10000687a72b?auto=format&fit=crop&w=900&q=80", desc: "Crispy chicken and bacon layered for maximum flavor." },
       { name: "Crispy Chicken Wrap", category: "burgers", price: "₦6,500", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80", desc: "A spicy chicken wrap with lettuce, sauce, and crunchy fries." },
       { name: "Cheesy Fries", category: "snacks", price: "₦2,400", image: "/assets/images/images%20(1).jpeg", desc: "Golden fries topped with melted cheese and herbs." },
-      { name: "Onion Rings", category: "snacks", price: "₦900", image: "/assets/images/onion-rings.jpeg", desc: "Crispy battered onion rings with dip." },
-      { name: "Vanilla Milkshake", category: "drinks", price: "₦1,200", image: "/assets/images/milkshake-vanilla.jpeg", desc: "Creamy vanilla milkshake with whipped cream." },
-      { name: "Mozzarella Sticks", category: "snacks", price: "₦1,800", image: "/assets/images/mozza-sticks.jpeg", desc: "Fried mozzarella sticks with marinara." },
-      { name: "Iced Tea", category: "drinks", price: "₦700", image: "/assets/images/iced-tea.jpeg", desc: "Lemon iced tea to cool your meal." },
+      { name: "Onion Rings", category: "snacks", price: "₦900", image: "/assets/images/fries.jpeg", desc: "Crispy battered onion rings with dip." },
+      { name: "Vanilla Milkshake", category: "drinks", price: "₦1,200", image: "/assets/images/kunu.jpeg", desc: "Creamy vanilla milkshake with whipped cream." },
+      { name: "Mozzarella Sticks", category: "snacks", price: "₦1,800", image: "/assets/images/Sausage%20Roll%20Recipe%20(Picnic%20Idea).jpeg", desc: "Fried mozzarella sticks with marinara." },
+      { name: "Iced Tea", category: "drinks", price: "₦700", image: "/assets/images/zobo.jpeg", desc: "Lemon iced tea to cool your meal." },
       { name: "Jollof Rice Box", category: "rice", price: "₦3,500", image: "/assets/images/Jollof Rice With Chicken.jpeg", desc: "A hearty jollof rice box served with a piece of chicken." },
       { name: "Coke Bottle", category: "drinks", price: "₦900", image: "/assets/images/Coca%20cola.jpeg", desc: "Refreshing Coca-Cola to pair with your burger." },
       { name: "7Up Bottle", category: "drinks", price: "₦900", image: "/assets/images/7up.jpeg", desc: "Light 7Up soda for a crisp finish." },
@@ -200,9 +206,9 @@ const defaultRestaurants = [
       { name: "Fresh Zobo Drink", category: "drinks", price: "₦500", image: "/assets/images/zobo.jpeg", desc: "A refreshing hibiscus drink to cool down the meal." },
       { name: "Kunu", category: "drinks", price: "₦700", image: "/assets/images/kunu.jpeg", desc: "A fizzy fruit blend with citrus notes and a chilled finish." },
       { name: "Coke Bottle", category: "drinks", price: "₦900", image: "/assets/images/Coca%20cola.jpeg", desc: "Chilled Coca-Cola to refresh your meal." },
-      { name: "Suya Skewers", category: "grill", price: "₦1,200", image: "/assets/images/suya.jpeg", desc: "Spiced suya skewers with onions and pepper." },
-      { name: "Small Pepper Soup", category: "soups", price: "₦1,000", image: "/assets/images/pepper-soup.jpeg", desc: "A light pepper soup perfect as a starter." },
-      { name: "Fried Plantain", category: "sides", price: "₦600", image: "/assets/images/plantain.jpeg", desc: "Sweet fried plantain as a side." },
+      { name: "Suya Skewers", category: "grill", price: "₦1,200", image: "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=900&q=80", desc: "Spiced suya skewers with onions and pepper." },
+      { name: "Small Pepper Soup", category: "soups", price: "₦1,000", image: "/assets/images/images.jpeg", desc: "A light pepper soup perfect as a starter." },
+      { name: "Fried Plantain", category: "sides", price: "₦600", image: "/assets/images/fries.jpeg", desc: "Sweet fried plantain as a side." },
       { name: "Zobo Bottle", category: "drinks", price: "₦700", image: "/assets/images/zobo.jpeg", desc: "Hibiscus zobo served chilled." },
       { name: "Monster Drink", category: "drinks", price: "₦900", image: "/assets/images/Monster.jpeg", desc: "Sweet Fanta orange soda to brighten your order." },
       { name: "7Up Bottle", category: "drinks", price: "₦900", image: "/assets/images/7up.jpeg", desc: "Crisp 7Up soda for a refreshing lift." },
@@ -297,7 +303,7 @@ async function initRestaurantPage() {
     const toRender = Array.isArray(items) ? items : [];
     const menuHtml = toRender
       .map((item) => {
-        const imageSrc = item.image ? normalizeRestaurantImagePath(item.image) : fallbackImage;
+        const imageSrc = normalizeRestaurantImagePath(item.image) || fallbackImage;
         const priceText = normalizePrice(item.price);
         const safeName = escapeHtml(item.name);
         const safeDesc = escapeHtml(item.desc || '');
